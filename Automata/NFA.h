@@ -14,6 +14,8 @@ private:
     Graph* automata;
 public:
     Graph* getAutomata();
+    bool setAutomata(Graph* graph);
+
 
 };
 

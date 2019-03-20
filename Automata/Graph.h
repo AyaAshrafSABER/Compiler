@@ -21,7 +21,7 @@ private:
 public:
     Graph();
     bool addEdge(Node * source, Node* Destination, string weight_regex);
-    bool mergeGraph(Graph* graph, string operation);
+    //bool mergeGraph(Graph* graph, string operation);
     Node* getStartState();
     Node* getEndState();
     vector<Node*> getAllstates();
