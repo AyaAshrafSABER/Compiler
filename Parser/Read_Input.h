@@ -7,13 +7,12 @@
 
 #include <string>
 #include <vector>
+#include "Construct_Automata.h"
 
 using namespace std;
 class Read_Input {
 private:
     string filename;
-    string line;
-    vector<string> line_tockens;
 public:
     Read_Input(string filename);
     bool read_file();

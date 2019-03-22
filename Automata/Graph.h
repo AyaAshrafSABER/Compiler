@@ -11,6 +11,7 @@
 #include "Edge.h"
 
 using namespace std;
+
 class Graph {
 private:
     Node* start;
@@ -19,8 +20,9 @@ private:
     vector<Edge*> transitions;
     string id;
 public:
-    Graph();
-    bool addEdge(Node * source, Node* Destination, string weight_regex);
+    Graph(string id);
+    string getId();
+    bool addEdge(Node * source, Node* Destination, Definition* weight_regex);
     //bool mergeGraph(Graph* graph, string operation);
     Node* getStartState();
     Node* getEndState();
@@ -28,7 +30,7 @@ public:
     vector<Node*> getAcceptanceStates();
     Edge* getTransition(Node* src, Node* dst);
     vector<Edge*> edges();
-    Node* getTargetNode(Node* src, string weight);
+    Node* getTargetNode(Node* src, Definition* weight);
 
 };
 

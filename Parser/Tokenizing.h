@@ -11,7 +11,7 @@
 using namespace std;
 class Tokenizing {
 public:
-    vector<string> getTokens(string line);
+    vector<string> getTokens(string line, char del);
 
 };
 

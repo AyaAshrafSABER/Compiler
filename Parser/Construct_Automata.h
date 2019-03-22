@@ -8,18 +8,26 @@
 #include <string>
 #include <map>
 #include <stack>
+#include <list>
+#include "Tokenizing.h"
 #include "../Automata/Graph.h"
+#include "../Automata/NFA.h"
+#include "../Automata/Definition.h"
+
 
 using namespace std;
 #define EPS "eps"
 class Construct_Automata {
 private:
-    map<string, Graph*> sub_Automatas;
-    stack<string> building;
+    list<Graph*> sub_Automatas;
+    map<string, Definition*> definitions;
 public:
-    void insertNewSub(Graph* sub_g);
+    bool constructAutomata(string line);
+
+    Graph* constructGraph(vector<string> tokens);
+    bool constructDefinition(string id, string definition);
+
     bool constructNFA();
-    bool constructGraph(string line);
 
 };
 

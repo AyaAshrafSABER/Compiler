@@ -6,20 +6,21 @@
 #define JAVA_COMPILER_EDGE_H
 
 #include <string>
-#include "Node.h"
 
 using namespace std;
+class Node;
+class Definition;
 class Edge {
 private:
     Node* source;
     Node* Destination;
-    string weight;
+    Definition *weight;
 
 public:
-    Edge(Node* src, Node* dst, string weight);
+    Edge(Node* src, Node* dst, Definition* weight);
     Node* getSource();
     Node* getDestination();
-    string getWeight();
+    Definition* getWeight();
 
 };
 
