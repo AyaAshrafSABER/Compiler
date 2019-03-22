@@ -13,7 +13,7 @@ class Definition;
 class Edge {
 private:
     Node* source;
-    Node* Destination;
+    Node* destination;
     Definition *weight;
 
 public:

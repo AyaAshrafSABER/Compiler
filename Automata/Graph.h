@@ -15,21 +15,19 @@ using namespace std;
 class Graph {
 private:
     Node* start;
-    Node* end;
+    Node* end; // for purpose of merging only
     vector<Node*> states;
     vector<Edge*> transitions;
-    string id;
 public:
-    Graph(string id);
-    string getId();
-    bool addEdge(Node * source, Node* Destination, Definition* weight_regex);
+    Graph();
+    bool addEdge(Node * source, Node* Destination, Definition* weight);
     //bool mergeGraph(Graph* graph, string operation);
     Node* getStartState();
     Node* getEndState();
     vector<Node*> getAllstates();
     vector<Node*> getAcceptanceStates();
     Edge* getTransition(Node* src, Node* dst);
-    vector<Edge*> edges();
+    vector<Edge*> getEdges();
     Node* getTargetNode(Node* src, Definition* weight);
 
 };

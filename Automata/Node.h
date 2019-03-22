@@ -9,20 +9,20 @@
 #include "Edge.h"
 #include <vector>
 using namespace std;
-
+#define N_ACC "n"
 class Node {
 private:
     int id;
     vector<Edge*> inwardEdges;
     vector<Edge*> outwardEdges;
-    bool accepted;
+    string status;
 public:
     Node(int id);
     vector<Edge*> getInwardEdges();
     vector<Edge*> getOutwardEdges();
     bool insertEdge(Edge* edge, bool in);
-    bool getStatus();
-    bool setStatus(bool accepted);
+    string getStatus();
+    void setStatus(string st);
 
 
 };
