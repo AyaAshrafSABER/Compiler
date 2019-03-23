@@ -19,6 +19,8 @@ bool Graph::addEdge(Node *source, Node *Destination, Definition *weight) {
     if(this->getTargetNode(source, weight) == Destination)
         return false;
     Edge* transition = new Edge(source, Destination, weight);
+    source->insertEdge(transition, false);
+    Destination->insertEdge(transition, true);
     this->transitions.push_back(transition);
     return true;
 
@@ -54,6 +56,14 @@ vector<Node*> Graph::getAllstates() {
 Node* Graph::getEndState() {
     return this->end;
 }
+
+void Graph::setEnd(Node *new_e) {
+    this->end = new_e;
+}
+
+void Graph::setStart(Node *new_s) {
+    this->start = new_s;
+}
 Node* Graph::getStartState() {
     return this->start;
 }
@@ -74,4 +84,15 @@ Edge* Graph::getTransition(Node *src, Node *dst) {
 
 vector<Edge*> Graph::getEdges() {
     return this->transitions;
+}
+
+
+
+void Graph::mergeGraph(vector<Edge *> edges, vector<Node *> states) {
+    for (int i = 0; i < edges.size() ; ++i) {
+        this->transitions.push_back(edges[i]);
+    }
+    for (int i = 0; i < states.size() ; ++i) {
+        this->states.push_back(states[i]);
+    }
 }

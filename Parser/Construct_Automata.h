@@ -29,7 +29,7 @@ public:
     bool constructAutomata(string line);
 
     Graph* constructGraph(vector<string> tokens);
-    bool constructDefinition(string id, string definition);
+    bool constructDefinition(string id, vector<string> definition);
 
     bool constructNFA();
 

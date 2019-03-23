@@ -38,3 +38,7 @@ bool Node::insertEdge(Edge *edge, bool in) {
     }
     return true;
 }
+
+int Node::getId() {
+    return id;
+}

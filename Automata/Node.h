@@ -23,7 +23,7 @@ public:
     bool insertEdge(Edge* edge, bool in);
     string getStatus();
     void setStatus(string st);
-
+    int getId();
 
 };
 

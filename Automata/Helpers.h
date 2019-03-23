@@ -7,16 +7,26 @@
 
 #include <string>
 #include <map>
+#include <list>
 #include "Graph.h"
 
 using namespace std;
 class Helpers {
 private:
-    map<string, int> helpers;
+    list<string> helpers;
+    Helpers();
 public :
+    static Helpers* getInstance();
     Graph* mergeGraphs(Graph* graph_1, Graph* graph_2h, string helper);
-    int getHelperCode(string helper);
+    list<string> getHelpers();
 
+    Graph *mergeOr(Graph *pGraph, Graph *graph_2);
+
+    Graph *mergePlus(Graph *pGraph);
+
+    Graph *mergeAst(Graph *pGraph);
+
+    Graph *mergeCont(Graph *pGraph, Graph *graph_2);
 };
 
 

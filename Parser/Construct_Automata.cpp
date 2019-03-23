@@ -11,23 +11,23 @@ Construct_Automata::Construct_Automata() {
 }
 bool Construct_Automata::constructAutomata(string line) {
     Tokenizing tokeniser;
-    vector<string> tokens = tokeniser.getTokens(line, " ");
+    vector<string> tokens = tokeniser.getTokens(line, ' ');
     char* type = const_cast<char *>(tokens[1].c_str());
-    switch (type[1])  {
-        case '=': { // definition
-            return constructDefinition(tokens[0], line.substr(2));
-        }
-        case ':': {
+    if (tokens[1] == "=")  {// definition
+            string id = tokens[0];
+            tokens.erase(tokens.begin());
+        tokens.erase(tokens.begin());
+
+        return constructDefinition(id, tokens);
+    }
+     if(tokens[1] == ":") {
             // part of the automata
             Graph *sub_g = constructGraph(tokens);
             sub_Automatas.push_back(sub_g);
             //construct new subgraph
             //add subgraph to map
             //return
-
-            break;
-        }
-        default: {
+     } else {
             //switch check if valid input
 
             if (line.at(0) == '{') {
@@ -42,9 +42,9 @@ bool Construct_Automata::constructAutomata(string line) {
             }
 
 
-        }
+     }
 
-    }
+
 
     return true;
 
@@ -55,7 +55,7 @@ Graph* Construct_Automata::constructGraph(vector<string> tokens) {
 }
 
 Graph* Construct_Automata::recurseBuild(vector<string> tokens, int i) {
-    Helpers* merge;
+    Helpers* merge = Helpers::getInstance();
     if(tokens.empty())
         return NULL;
     string temp = tokens.front();
@@ -75,16 +75,14 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int i) {
         p_t.pop_back();
         d_g = recurseBuild(p_t, i);
     }
-    string h = "";
+    string h = ".";
     if(!tokens.empty()) {
-        if (std::find(helpers.begin(), helpers.end(), tokens.front()) != helpers.end()) {
+        if (std::find(merge->getHelpers().begin(), merge->getHelpers().end(), tokens.front()) != merge->getHelpers().end() && tokens.front() != "(") {
             h = tokens.front();
             tokens.erase(tokens.begin());
         }
     }
-    if(h == "(") {
-        h = "";
-    }
+
     if(!brackets) {
         if (definitions.count(temp)) {
             d_g = static_cast<Graph *>(definitions[temp]->getDef());
@@ -94,6 +92,8 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int i) {
             n2->setStatus(temp);
             Definition *w = new Definition(&temp, true);
             d_g->addEdge(n1, n2, w);
+            d_g->setStart(n1);
+            d_g->setEnd(n2);
         } else if (!tokens.empty()) {
             if (tokens.front() == "-") {
                 string tmp = temp + tokens.front();
@@ -106,6 +106,8 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int i) {
                 n2->setStatus(tmp);
                 Definition *w = new Definition(&tmp, true);
                 d_g->addEdge(n1, n2, w);
+                d_g->setStart(n1);
+                d_g->setEnd(n2);
             } else {
                 vector<string> rec;
                 for (int j = 0; j < temp.length(); ++j) {
@@ -122,11 +124,11 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int i) {
             d_g = recurseBuild(rec, i);
         }
     }
-    if(h == "*" || h == "+") {
-        merge->mergeGraphs(d_g, NULL, h);
-        h = "";
+    if(h == "*" || h == "\\+") {
+        d_g = merge->mergeGraphs(d_g, NULL, h);
+        h = ".";
         if(!tokens.empty()) {
-            if (std::find(helpers.begin(), helpers.end(), tokens.front()) != helpers.end()) {
+            if (std::find(merge->getHelpers().begin(), merge->getHelpers().end(), tokens.front()) != merge->getHelpers().end()) {
                 h = tokens.front();
                 tokens.erase(tokens.begin());
             }
@@ -135,13 +137,11 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int i) {
     return merge->mergeGraphs(d_g, recurseBuild(tokens, i),h);
 
 }
-bool Construct_Automata::constructDefinition(string id, string definition) {
+bool Construct_Automata::constructDefinition(string id, vector<string> definition) {
     Tokenizing tokenizer;
     int node_id = 1;
-    vector<string> tokens = tokenizer.getTokens(definition," ");
-    Graph* g = recurseBuild(tokens, node_id);
-
-
+    Graph* g = recurseBuild(definition, node_id);
+    definitions.insert(pair<string, Definition*> (id, new Definition(g, false)));
 }
 
 bool Construct_Automata::constructNFA() {}

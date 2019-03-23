@@ -7,11 +7,17 @@
 
 #include <string>
 #include <vector>
+#include <list>
 
 using namespace std;
 class Tokenizing {
+private:
+    vector<string> tokens;
+    list<string> helpers;
+    void parseString(string str);
 public:
-    vector<string> getTokens(string line, string del);
+    Tokenizing();
+    vector<string> getTokens(string line, char del);
 
 };
 
