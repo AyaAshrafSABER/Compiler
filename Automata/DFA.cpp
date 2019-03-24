@@ -19,3 +19,6 @@ DFA* DFA::getInstance()
 DFA::DFA()
 {
 }
+vector<pair<Node*, map<Definition*,set<Node*>>>>  DFA::getDFA(){
+    return this->transitionStateTable;
+}
