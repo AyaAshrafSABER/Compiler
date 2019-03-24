@@ -32,6 +32,16 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Automata/Edge.cpp" />
+		<Unit filename="Automata/Edge.h" />
+		<Unit filename="Automata/Graph.cpp" />
+		<Unit filename="Automata/Graph.h" />
+		<Unit filename="Automata/Helpers.cpp" />
+		<Unit filename="Automata/Helpers.h" />
+		<Unit filename="Automata/NFA.cpp" />
+		<Unit filename="Automata/NFA.h" />
+		<Unit filename="Automata/Node.cpp" />
+		<Unit filename="Automata/Node.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

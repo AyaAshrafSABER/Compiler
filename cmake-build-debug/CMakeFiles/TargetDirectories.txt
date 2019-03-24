@@ -1,0 +1,3 @@
+F:/2nd semester third year/2nd Semester/1 Compilers/4 Labs/Compiler/cmake-build-debug/CMakeFiles/Compiler.dir
+F:/2nd semester third year/2nd Semester/1 Compilers/4 Labs/Compiler/cmake-build-debug/CMakeFiles/edit_cache.dir
+F:/2nd semester third year/2nd Semester/1 Compilers/4 Labs/Compiler/cmake-build-debug/CMakeFiles/rebuild_cache.dir
