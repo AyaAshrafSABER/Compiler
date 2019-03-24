@@ -12,9 +12,16 @@
 
 class DFA {
 private:
-    vector<map<Definition*,set<Node*>>> transitionStateTable;
+    /* Here will be the instance stored. */
+    static DFA* instance;
+    /* Private constructor to prevent instancing. */
+    DFA();
+
+    vector< pair <Node*,  map<Definition*,set<Node*>>>>  transitionStateTable;
 public:
-    vector<map<Definition*,set<Node*>>> getDFA();
+    /* Static access method. */
+    static DFA* getInstance();
+    vector< pair <Node*,  map<Definition*,set<Node*>>>>   getDFA();
 };
 
 

@@ -3,3 +3,19 @@
 //
 
 #include "DFA.h"
+/* Null, because instance will be initialized on demand. */
+DFA* DFA::instance = 0;
+
+DFA* DFA::getInstance()
+{
+    if (instance == 0)
+    {
+        instance = new DFA();
+    }
+
+    return instance;
+}
+//constructor
+DFA::DFA()
+{
+}
