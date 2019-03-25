@@ -7,6 +7,9 @@
 #include <algorithm>
 #include "Tokenizing.h"
 #include "../Automata/Helpers.h"
+#include <bits/stdc++.h>
+#include <bits/stdc++.h>
+
 
 Tokenizing::Tokenizing() {
     Helpers * h  = Helpers::getInstance();
@@ -14,13 +17,27 @@ Tokenizing::Tokenizing() {
 
 }
 
+
 vector<string> Tokenizing::getTokens(string line, char del) {
     std::istringstream ss(line);
     std::string token;
+  //  regex re("(<[=>]?|==|>=?|\\&\\&|\\|\\||!?=)");
+    //smatch match;
+
 
     while(std::getline(ss, token, del)) {
-        this->parseString(token);
+   //     if (regex_search(token, match, re) == true) {
+      //      tokens.push_back(token);
+        //} else {
+        if(token.find("-") != string::npos && token.length() == 1) {
+            token = "\\-";
+        } else  if(token.find("+") != string::npos && token.length() == 1) {
+            token = "\\+";
+        }
+            this->parseString(token);
     }
+      //  }
+
     return  tokens;
 }
 
@@ -30,15 +47,30 @@ void Tokenizing::parseString(string str) {
     for (int i = 0; i < str.length() ; ++i) {
         char c = str.at(i);
         if(c == '+') {
-            temp = "\\+";
+            if(build == "\\"){
+                build.clear();
+            }
+              temp = "\\+";
+        } else if(c == '-'){
+            if(build == "\\"){
+                build.clear();
+            }
+                temp = "\\-";
         } else {
             temp = string(1, c);
         }
-        if (std::find(helpers.begin(), helpers.end(), temp) != helpers.end()) {
+        if(build == "\\"){
+            tokens.push_back(build + temp);
+            build.clear();
+        } else if (std::find(helpers.begin(), helpers.end(), temp) != helpers.end()) {
             if(build.length() > 0)
                 tokens.push_back(build);
             tokens.push_back(temp);
             build.clear();
+        } else if(temp == "\\"){
+            if(build.length() > 0)
+                tokens.push_back(build);
+            build = temp;
         } else {
             build += temp;
         }
@@ -46,4 +78,16 @@ void Tokenizing::parseString(string str) {
     if(build.length() > 0) {
         tokens.push_back(build);
     }
+}
+
+void Tokenizing::splitByspaces(string line) {
+    string s = "\\";
+    string result = "";
+    for (int i= 0; i < line.length(); i++) {
+        char c = line.at(i);
+
+
+
+    }
+
 }

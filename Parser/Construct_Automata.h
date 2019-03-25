@@ -14,27 +14,49 @@
 #include "../Automata/Graph.h"
 #include "../Automata/NFA.h"
 #include "../Automata/Definition.h"
+#include "../Automata/Definitions_Table.h"
 
 
 using namespace std;
 #define EPS "eps"
 class Construct_Automata {
 private:
-    list<Graph*> sub_Automatas;
-    map<string, Definition*> definitions;
+    vector<Graph*> sub_Automatas;
+    Definitions_Table* def_t;
+    int def_id = 1;
+    int nfa_id = 1;
     list<string> helpers;
     int node_id;
 public:
     Construct_Automata();
     bool constructAutomata(string line);
 
-    Graph* constructGraph(vector<string> tokens);
+    Graph* constructNFASubGraph(vector<string> tokens);
     bool constructDefinition(string id, vector<string> definition);
 
     bool constructNFA();
 
-    Graph* recurseBuild(vector<string> tokens, int i);
+    Graph* recurseBuild(vector<string> tokens, int* i);
 
+    Graph *recurseBrackets(vector<string> *pVector, int *pInt);
+
+    string helperValue(vector<string> *pVector);
+
+    Graph *createGraph(string basic_string, int *pInt);
+
+    Graph *splitToken(string basic_string, int *pInt);
+
+    Graph *createGraph(vector<string> *pVector, string basic_string, int *pInt);
+    Graph* createGraphFromExistingDefintition(Definition* def, int* i, string temp) ;
+
+
+        void testGraph(Graph *pGraph);
+
+    Graph* getCont(Graph *d_g, vector<string> *tokens, int *i);
+
+    void constructKeyWords(vector<string> tokens);
+
+    void constructPunct(vector<string> tokens);
 };
 
 

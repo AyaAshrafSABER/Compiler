@@ -13,12 +13,13 @@ using namespace std;
 class Tokenizing {
 private:
     vector<string> tokens;
-    list<string> helpers;
+    vector<string> helpers;
     void parseString(string str);
 public:
     Tokenizing();
     vector<string> getTokens(string line, char del);
 
+    void splitByspaces(string line);
 };
 
 

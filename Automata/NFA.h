@@ -12,7 +12,9 @@ using namespace std;
 class NFA {
 private:
     Graph* automata;
+    NFA();
 public:
+    static NFA* getInstance();
     Graph* getAutomata();
     bool setAutomata(Graph* graph);
 

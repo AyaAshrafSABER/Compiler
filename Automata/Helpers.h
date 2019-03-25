@@ -13,12 +13,13 @@
 using namespace std;
 class Helpers {
 private:
-    list<string> helpers;
+    vector<string> helpers;
+    Definition *w;
     Helpers();
 public :
     static Helpers* getInstance();
     Graph* mergeGraphs(Graph* graph_1, Graph* graph_2h, string helper);
-    list<string> getHelpers();
+    vector<string> getHelpers();
 
     Graph *mergeOr(Graph *pGraph, Graph *graph_2);
 
@@ -27,6 +28,7 @@ public :
     Graph *mergeAst(Graph *pGraph);
 
     Graph *mergeCont(Graph *pGraph, Graph *graph_2);
+    bool isAhelper(string s);
 };
 
 
