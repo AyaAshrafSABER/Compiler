@@ -12,7 +12,7 @@ Read_Input::Read_Input(string filename) {
 
 //Reading Language Description.
 bool Read_Input::read_file() {
-    ifstream infile("Description.txt");
+    ifstream infile(filename);
     string line;
     Construct_Automata automata_c;
     vector<string> lineTokens;
@@ -20,6 +20,7 @@ bool Read_Input::read_file() {
         while (getline(infile, line)) {
             automata_c.constructAutomata(line);
         }
+        automata_c.constructNFA();
     return true;
     } else {
         return false;

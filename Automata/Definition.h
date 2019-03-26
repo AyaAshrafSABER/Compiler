@@ -10,13 +10,17 @@
 using namespace std;
 class Definition {
 private:
-    void* definition;
-    bool is_string;
+    Graph *definition;
 public:
-    Definition(void* def, bool is_string);
-    void* getDef();
+    Definition(Graph *def);
+
+    Graph *getDef();
+
     bool contains(string input);
-    bool setDef(void* def);
+
+    bool setDef(Graph *def);
+
+    Node* DFS(Node *start, int numberOfStates, string input);
 };
 
 

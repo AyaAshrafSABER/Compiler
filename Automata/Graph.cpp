@@ -39,15 +39,7 @@ Node* Graph::getTargetNode(Node *src, Definition *weight) {
 
 }
 
-vector<Node*> Graph::getAcceptanceStates() {
-    vector<Node*> acc;
-    for(int i = 0; i < states.size(); i++) {
-        if(states[i]->getStatus() != N_ACC) {
-            acc.push_back(states[i]);
-        }
-    }
-    return acc;
-}
+
 
 vector<Node*> Graph::getAllstates() {
     return this->states;
@@ -58,29 +50,20 @@ Node* Graph::getEndState() {
 }
 
 void Graph::setEnd(Node *new_e) {
+    if(find(states.begin(), states.end(), new_e) == states.end())
+        this->states.push_back(new_e);
     this->end = new_e;
 }
 
 void Graph::setStart(Node *new_s) {
+    if(find(states.begin(), states.end(), new_s) == states.end())
+        this->states.push_back(new_s);
     this->start = new_s;
 }
 Node* Graph::getStartState() {
     return this->start;
 }
 
-Edge* Graph::getTransition(Node *src, Node *dst) {
-    if(find(states.begin(), states.end(), src) == states.end())
-        return NULL;
-    if(find(states.begin(), states.end(), dst) == states.end())
-        return NULL;
-    vector<Edge*> outward = src->getOutwardEdges();
-    for(int i = 0; i < outward.size(); i++) {
-        if(outward[i]->getDestination() == dst) {
-            return outward[i];
-        }
-    }
-    return NULL;
-}
 
 vector<Edge*> Graph::getEdges() {
     return this->transitions;

@@ -22,15 +22,12 @@ public:
     Graph();
     bool addEdge(Node * source, Node* Destination, Definition* weight);
     void mergeGraph(vector<Edge*> edges, vector<Node*> states);
-    //bool mergeGraph(Graph* graph, string operation);
     Node* getStartState();
     Node* getEndState();
     vector<Node*> getAllstates();
     void setStart(Node* new_s);
     void setEnd(Node* new_e);
 
-    vector<Node*> getAcceptanceStates();
-    Edge* getTransition(Node* src, Node* dst);
     vector<Edge*> getEdges();
     Node* getTargetNode(Node* src, Definition* weight);
 
