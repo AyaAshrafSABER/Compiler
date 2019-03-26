@@ -19,21 +19,22 @@ private:
     /* Private constructor to prevent instancing. */
     DFA();
 
-    map< Node*,  map<Definition*,set<Node*>>> initialStateTable;
-    vector< pair <set<Node*>,  map<Definition*,set<Node*>>>>  setTransitionStateTable;
-    vector< pair <Node*,  map<Definition*,set<Node*>>>>  transitionStateTable;
+    map< Node*,  map<Definition*,set<Node*>>> nfaStateTable;
+    vector< set<Node*>>  stateMappingTable;
+    vector< pair <Node*,  map<Definition*,Node*>>>  transitionStateTable;
 
     set<Node*> getTransitionStates(Node* state, Definition* def);
     set<Node*> getEpsilonClosure(Node* state);
 
-    void insertNewStateInTransitionTable(Node* node);
+    void insertNewStateInInitialTable(Node* node);
     void BFS(Node* start, int numberOfStates);
     void loopDefinition(Definition* def, Node* node, set<Node*> set);
+    int tableContainsTheSameState(set<Node*> state);
 
 public:
     /* Static access method. */
     static DFA* getInstance();
-    vector< pair <Node*,  map<Definition*,set<Node*>>>>   getDFA();
+    vector< pair <Node*,  map<Definition*, Node*>>>   getDFA();
 };
 
 
