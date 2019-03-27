@@ -14,6 +14,7 @@
 #include "../Automata/Node.h"
 #include "../Automata/DFA.h"
 #include "../Automata/Graph.h"
+#include "../Automata/Definitions_Table.h"
 class DFAMinimizer {
 private:
     /* Here will be the instance stored. */
@@ -39,7 +40,6 @@ public:
     static DFAMinimizer* getInstance();
     vector<pair<Node*,map<Definition*,set<Node*>>>> getMinimizedDFA();
     void printMinimizedDFA();
-    Graph getFinalAutomata();
 
 };
 

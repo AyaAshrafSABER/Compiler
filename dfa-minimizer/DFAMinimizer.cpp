@@ -11,6 +11,9 @@ DFAMinimizer::DFAMinimizer()
     this->dfa = DFA::getInstance();
     this->setFirstPartition(this->Accepted,this->NotAccepted,this->previousPartition);
     this->partitioning(this->dfa, this->previousPartition, this->nextPartition);
+    //ToDo construct minimized state table
+    // from pervious partition
+
 }
 
 DFAMinimizer* DFAMinimizer::getInstance()
@@ -24,8 +27,8 @@ DFAMinimizer* DFAMinimizer::getInstance()
 
 
 void DFAMinimizer:: setFirstPartition(set<Node*> Acc, set<Node*> Not_Acc, vector<set<Node*>> partitions){ //p0
-    vector<pair<Node*, map<Definition*,set<Node*>>>> transitionStateTable = this->dfa->getDFA();
-    vector<pair<Node*, map<Definition*,set<Node*>>>>::iterator ptr ;
+    vector<pair<Node*, map<Definition*,Node*>>> transitionStateTable = this->dfa->getDFA();
+    vector<pair<Node*, map<Definition*,Node*>>>::iterator ptr ;
     for(auto ptr=transitionStateTable.begin(); ptr!=transitionStateTable.end(); ++ptr) {
         Node temp = *ptr->first;
         if (temp.getStatus().compare(N_ACC) == 0) {
@@ -77,20 +80,37 @@ void DFAMinimizer::distinguishStates(DFA* dfa,vector<set<Node*>> P,vector<set<No
 
 
 bool DFAMinimizer::areEquivalentStates(DFA* dfa , vector<set<Node*>> P, Node* A, Node *B){
-    vector<pair<Node*, map<Definition*,set<Node*>>>> TT = this->dfa->getDFA();
-    vector<pair<Node*, map<Definition*,set<Node*>>>>::iterator ptr ;
-    map<Definition*,set<Node*>> Amap;
-    map<Definition*,set<Node*>> Bmap;
+    vector<pair<Node*, map<Definition*,Node*>>> TT = dfa->getDFA();
+    vector<pair<Node*, map<Definition*, Node*>>>::iterator ptr ;
+    map<Definition*,Node*> a_map;
+    map<Definition*,Node*> b_map;
     for(auto ptr = TT.begin(); ptr != TT.end(); ++ptr) {
         if (ptr->first = A) {
-            Amap = ptr->second;
+            a_map = ptr->second;
         } else if (ptr->first = B) {
-            Bmap = ptr->second;
+            b_map = ptr->second;
         }
     }
-    //ToDo -> check equal state
-    return  Bmap.size() == Amap.size()
-                  && std::equal(Amap.begin(), Amap.end(),Bmap.begin());
+    map<string,Definition*> DT = Definitions_Table::getInstance()->getTable();
+
+    for (const auto& any : DT) {
+        Definition *j = any.second;
+        Node* stateA = a_map[j];
+        Node*stateB = b_map[j];
+        vector<set<Node*>>::iterator s;
+        for(auto s = P.begin(); s != P.end(); ++s) {
+            set<Node*> temp = *s;
+            set<Node*>::iterator it1 = temp.find(stateA);
+            set<Node*>::iterator it2 = temp.find(stateB);
+            if (it1 != temp.end() && it2 != temp.end()) {
+                return true;
+            } else if (it1 != temp.end() || it2 != temp.end()) {
+                return false;
+            }
+        }
+
+    }
+    return  false;
 }
 void DFAMinimizer::printMinimizedDFA(){
 
