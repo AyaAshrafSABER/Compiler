@@ -23,7 +23,7 @@ DFA* DFA::getInstance() {
 set<Node*> DFA::getTransitionStates (Node* state, Definition* def) {
     set<Node*> setReturned;
     set<Node*> setPtr = nfaStateTable.at(state).at(def);
-    copy(setPtr.begin(), setPtr.end(), setReturned);
+//    copy(setPtr.begin(), setPtr.end(), setReturned);
     return setReturned;
 }
 
@@ -60,8 +60,8 @@ int DFA::tableContainsTheSameState(set<Node *> state) {
 }
 
 DFA::DFA() {
-    NFA nfa;
-    Graph* graph = nfa.getAutomata();
+    NFA* nfa;
+    Graph* graph = nfa->getInstance()->getAutomata();
     Node* start = graph->getStartState();
     int numberOfStates = graph->getAllstates().size();
     //initiate initialStateTable
@@ -152,4 +152,8 @@ void DFA::BFS(Node* start, int numberOfStates) {
             }
         }
     }
+}
+
+vector< pair <Node*,  map<Definition*, Node*>>> DFA::getDFA() {
+    return this->transitionStateTable;
 }
