@@ -3,10 +3,18 @@
 //
 
 #include "NFA.h"
+#include "../Parser/Read_Input.h"
+
 static NFA* instance;
 
 NFA::NFA() {
+
 }
+void NFA::read_input() {
+    Read_Input *t = new Read_Input("Description.txt");
+    t->read_file();
+}
+
 
 NFA* NFA::getInstance() {
     if(instance == NULL)

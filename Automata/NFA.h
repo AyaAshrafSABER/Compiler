@@ -8,7 +8,6 @@
 #include "Graph.h"
 
 using namespace std;
-
 class NFA {
 private:
     Graph* automata;
@@ -17,6 +16,7 @@ public:
     static NFA* getInstance();
     Graph* getAutomata();
     bool setAutomata(Graph* graph);
+    void read_input();
 
 
 };

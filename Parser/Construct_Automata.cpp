@@ -21,37 +21,37 @@ bool Construct_Automata::constructAutomata(string line) {
         tokens.erase(tokens.begin());
         return constructDefinition(id, tokens);
     }
-     if(tokens[1] == ":") {
-            // part of the automata
-         string id = tokens[0];
-         tokens.erase(tokens.begin());
-         tokens.erase(tokens.begin());
-         Graph *sub_g = constructNFASubGraph(tokens);
-         testGraph(sub_g);
-         nfa_id = sub_g->getEndState()->getId()+1;
-         sub_g->getEndState()->setStatus(id);
-         sub_Automatas.push_back(sub_g);
-            //construct new subgraph
-            //add subgraph to map
-            //return
-     } else {
-            //switch check if valid input
+    if(tokens[1] == ":") {
+        // part of the automata
+        string id = tokens[0];
+        tokens.erase(tokens.begin());
+        tokens.erase(tokens.begin());
+        Graph *sub_g = constructNFASubGraph(tokens);
+        //   testGraph(sub_g);
+        nfa_id = sub_g->getEndState()->getId()+1;
+        sub_g->getEndState()->setStatus(id);
+        sub_Automatas.push_back(sub_g);
+        //construct new subgraph
+        //add subgraph to map
+        //return
+    } else {
+        //switch check if valid input
 
-            if (tokens[0] == "{") {
-                tokens.erase(tokens.begin());
-                tokens.erase(tokens.end());
-                constructKeyWords(tokens);
-                //keywords
-                //data types
-            } else if (line.at(0) == '[') {
-                tokens.erase(tokens.begin());
-                tokens.erase(tokens.end());
-                constructPunct(tokens);
-            } else {
-                return false;
-            }
-     }
-     return true;
+        if (tokens[0] == "{") {
+            tokens.erase(tokens.begin());
+            tokens.erase(tokens.end());
+            constructKeyWords(tokens);
+            //keywords
+            //data types
+        } else if (line.at(0) == '[') {
+            tokens.erase(tokens.begin());
+            tokens.erase(tokens.end());
+            constructPunct(tokens);
+        } else {
+            return false;
+        }
+    }
+    return true;
 
 
 }
@@ -95,7 +95,7 @@ bool Construct_Automata::constructDefinition(string id, vector<string> definitio
     Graph* g = recurseBuild(definition, &def_id);
     g->getEndState()->setStatus(id);
     def_id = g->getEndState()->getId()+1;
-    testGraph(g);
+    // testGraph(g);
     def_t->insertInMap(id, new Definition(g));
 }
 
@@ -104,10 +104,12 @@ bool Construct_Automata::constructNFA() {
     Definition* eps = def_t->getDefinitions("EPS");
 
     Node* new_start = new Node(nfa_id);
+
     for (int i = 0; i <sub_Automatas.size() ; ++i) {
         nfa->mergeGraph(sub_Automatas[i]->getEdges(), sub_Automatas[i]->getAllstates());
         nfa->addEdge(new_start, sub_Automatas[i]->getStartState(), eps);
     }
+    nfa->setStart(new_start);
     NFA* n = NFA::getInstance();
     n->setAutomata(nfa);
     testGraph(n->getAutomata());
@@ -175,13 +177,13 @@ Graph *Construct_Automata::splitToken(string temp, int *i) {
     return recurseBuild(rec, i);
 }
 Graph* Construct_Automata::createGraphFromExistingDefintition(Definition* def, int* i, string temp) {
-        Graph* d_g = new Graph();
-        Node *n1 = new Node((*i)++);
-        Node *n2 = new Node((*i)++);
-        n2->setStatus(temp);
-        d_g->addEdge(n1, n2, def);
-        d_g->setStart(n1);
-        d_g->setEnd(n2);
+    Graph* d_g = new Graph();
+    Node *n1 = new Node((*i)++);
+    Node *n2 = new Node((*i)++);
+    n2->setStatus(temp);
+    d_g->addEdge(n1, n2, def);
+    d_g->setStart(n1);
+    d_g->setEnd(n2);
 
     return d_g;
 }
@@ -221,8 +223,8 @@ void Construct_Automata::testGraph(Graph *g) {
     for (int j = 0; j < edges.size(); ++j) {
 
 
-                cout << "Edge Weight type " << edges[j]->getWeight()->getDef()->getEndState()->getStatus() <<
-                     " from" << edges[j]->getSource()->getId() << " to " << edges[j]->getDestination()->getId() << endl;
+        cout << "Edge Weight type " << edges[j]->getWeight()->getDef()->getEndState()->getStatus() <<
+             " from" << edges[j]->getSource()->getId() << " to " << edges[j]->getDestination()->getId() << endl;
 
 
 
