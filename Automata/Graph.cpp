@@ -13,9 +13,9 @@ Graph::Graph() {
 
 bool Graph::addEdge(Node *source, Node *Destination, Definition *weight) {
     if(find(states.begin(), states.end(), source) == states.end())
-        states.push_back(source);
+        this->states.push_back(source);
     if(find(states.begin(), states.end(),Destination ) == states.end())
-        states.push_back(Destination);
+        this->states.push_back(Destination);
     if(this->getTargetNode(source, weight) == Destination)
         return false;
     Edge* transition = new Edge(source, Destination, weight);
