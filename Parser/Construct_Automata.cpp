@@ -21,13 +21,13 @@ bool Construct_Automata::constructAutomata(string line) {
         tokens.erase(tokens.begin());
         return constructDefinition(id, tokens);
     }
-     if(tokens[1] == ":") {
+    if(tokens[1] == ":") {
             // part of the automata
          string id = tokens[0];
          tokens.erase(tokens.begin());
          tokens.erase(tokens.begin());
          Graph *sub_g = constructNFASubGraph(tokens);
-      //   testGraph(sub_g);
+        testGraph(sub_g);
          nfa_id = sub_g->getEndState()->getId()+1;
          sub_g->getEndState()->setStatus(id);
          sub_Automatas.push_back(sub_g);
@@ -95,13 +95,13 @@ bool Construct_Automata::constructDefinition(string id, vector<string> definitio
     Graph* g = recurseBuild(definition, &def_id);
     g->getEndState()->setStatus(id);
     def_id = g->getEndState()->getId()+1;
-   // testGraph(g);
+   testGraph(g);
     def_t->insertInMap(id, new Definition(g));
 }
 
 bool Construct_Automata::constructNFA() {
     Graph* nfa = new Graph();
-    Definition* eps = def_t->getDefinitions("EPS");
+    Definition* eps = def_t->getDefinitions(EPS);
 
     Node* new_start = new Node(nfa_id);
 
@@ -189,7 +189,13 @@ Graph* Construct_Automata::createGraphFromExistingDefintition(Definition* def, i
 }
 
 Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int *i) {
-    Definition* d = def_t->getDefinitions(temp);
+    Definition *d;
+    if(temp == "\\L") {
+         d = def_t->getDefinitions(EPS);
+    } else {
+         d = def_t->getDefinitions(temp);
+    }
+
     if (d != NULL) {
         return createGraphFromExistingDefintition(d,i, temp);
     } else if (temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' ) {

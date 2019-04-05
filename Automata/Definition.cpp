@@ -6,14 +6,8 @@
 #include "Definitions_Table.h"
 #include <stack>
 Definition::Definition(Graph* def) {
-
-
-        definition = def;
-
-
-
+    definition = def;
 }
-
 
 bool Definition::setDef(Graph *def) {
     this->definition = def;

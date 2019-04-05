@@ -19,7 +19,7 @@ Helpers::Helpers() {
             helpers.push_back(line);
         }
     }
-    w = def_t->getDefinitions("EPS");
+    w = def_t->getDefinitions(EPS);
 }
 Helpers* Helpers::getInstance() {
     if(instance == NULL){
