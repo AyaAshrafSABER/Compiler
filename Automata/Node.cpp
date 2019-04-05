@@ -4,6 +4,7 @@
 
 #include <algorithm>
 #include "Node.h"
+#include "Definitions_Table.h"
 
 Node::Node(int id) {
     this->id = id;

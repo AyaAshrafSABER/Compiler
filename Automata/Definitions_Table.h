@@ -8,6 +8,8 @@
 #include <string>
 #include <map>
 #include "Definition.h"
+#define EPS "EPS"
+#define N_ACC "n"
 
 using namespace std;
 class Definitions_Table {

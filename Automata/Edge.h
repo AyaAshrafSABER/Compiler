@@ -6,8 +6,6 @@
 #define JAVA_COMPILER_EDGE_H
 
 #include <string>
-#define EPS "eps"
-
 
 using namespace std;
 class Node;
