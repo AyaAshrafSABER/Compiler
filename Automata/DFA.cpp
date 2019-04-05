@@ -126,6 +126,7 @@ DFA::DFA() {
                     dummyState->setStatus(N_ACC);
                     map<string, Definition*> definitions = Definitions_Table::getInstance()->getTable();
                     transitionStateTable.push_back(make_pair(dummyState, map<Definition *, Node *>()));
+                    stateMappingTable.push_back(set<Node*>());
                     for (map<string, Definition*>::iterator it = definitions.begin(); it != definitions.end(); ++it) {
                         if(it->second == Eps) {
                             continue;
