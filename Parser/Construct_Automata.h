@@ -44,9 +44,9 @@ public:
 
     Graph *createGraph(string basic_string, int *pInt);
 
-    Graph *splitToken(string basic_string, int *pInt);
+    Graph *splitToken(string basic_string, int *pInt, string h);
 
-    Graph *createGraph(vector<string> *pVector, string basic_string, int *pInt);
+    Graph *createGraph(vector<string> *pVector, string basic_string, int *pInt, string h);
     Graph* createGraphFromExistingDefintition(Definition* def, int* i, string temp) ;
 
 

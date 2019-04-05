@@ -14,7 +14,8 @@ Construct_Automata::Construct_Automata() {
 bool Construct_Automata::constructAutomata(string line) {
     Tokenizing tokeniser;
     vector<string> tokens = tokeniser.getTokens(line, ' ');
-    char* type = const_cast<char *>(tokens[1].c_str());
+    if(tokens.size() < 1)
+        return false;
     if (tokens[1] == "=")  {// definition
         string id = tokens[0];
         tokens.erase(tokens.begin());
@@ -27,7 +28,7 @@ bool Construct_Automata::constructAutomata(string line) {
          tokens.erase(tokens.begin());
          tokens.erase(tokens.begin());
          Graph *sub_g = constructNFASubGraph(tokens);
-        testGraph(sub_g);
+       // testGraph(sub_g);
          nfa_id = sub_g->getEndState()->getId()+1;
          sub_g->getEndState()->setStatus(id);
          sub_Automatas.push_back(sub_g);
@@ -75,18 +76,23 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int* i) {
     string h = helperValue(&tokens);
 
     if(!brackets) {
-        d_g = createGraph(&tokens, temp, i);
+        d_g = createGraph(&tokens, temp, i,h);
     }
 
     if(h == "*" || h == "\\+") {
-        d_g = merge->mergeGraphs(d_g, NULL, h);
+        if(!(temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' )) {
+            h = helperValue(&tokens);
+        } else {
+            d_g = merge->mergeGraphs(d_g, NULL, h, i);
+        }
         h = helperValue(&tokens);
     }
     while (h == "." && !tokens.empty()) {
         d_g = getCont(d_g, &tokens, i);
+     //   testGraph(d_g);
         h = helperValue(&tokens);
     }
-    return merge->mergeGraphs(d_g, recurseBuild(tokens, i),h);
+    return merge->mergeGraphs(d_g, recurseBuild(tokens, i),h, i);
 
 }
 bool Construct_Automata::constructDefinition(string id, vector<string> definition) {
@@ -169,11 +175,13 @@ Graph *Construct_Automata::createGraph(string temp, int *i) {
     return d_g;
 }
 
-Graph *Construct_Automata::splitToken(string temp, int *i) {
+Graph *Construct_Automata::splitToken(string temp, int *i, string h) {
     vector<string> rec;
     for (int j = 0; j < temp.length(); ++j) {
         rec.push_back(string(1, temp.at(j)));
     }
+    if(h == "*" || h == "+")
+        rec.push_back(h);
     return recurseBuild(rec, i);
 }
 Graph* Construct_Automata::createGraphFromExistingDefintition(Definition* def, int* i, string temp) {
@@ -188,7 +196,7 @@ Graph* Construct_Automata::createGraphFromExistingDefintition(Definition* def, i
     return d_g;
 }
 
-Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int *i) {
+Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int *i,string h) {
     Definition *d;
     if(temp == "\\L") {
          d = def_t->getDefinitions(EPS);
@@ -209,7 +217,7 @@ Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int 
         }
         return createGraph(temp, i);
     } else if (temp.length() > 1) {
-        return splitToken(temp, i);
+        return splitToken(temp, i,h);
     }
 }
 
@@ -253,25 +261,25 @@ Graph* Construct_Automata::getCont(Graph *d_g, vector<string> *tokens, int *i) {
     string h = helperValue(tokens);
 
     if(!brackets) {
-        g = createGraph(tokens, temp, i);
+        g = createGraph(tokens, temp, i, h);
     }
 
     if(h == "*" || h == "\\+") {
-        g = merge->mergeGraphs(g, NULL, h);
+        g = merge->mergeGraphs(g, NULL, h, i);
         h = helperValue(tokens);
     } else {
         if(h != ".")
             tokens->insert(tokens->begin(), h);
     }
 
-    return merge->mergeGraphs(d_g, g, ".");
+    return merge->mergeGraphs(d_g, g, ".", i);
 
 }
 
 void Construct_Automata::constructKeyWords(vector<string> tokens) {
     for (int i = 0; i < tokens.size(); ++i) {
         Helpers* merge = Helpers::getInstance();
-        Graph* d_g = splitToken(tokens[i], &nfa_id);
+        Graph* d_g = splitToken(tokens[i], &nfa_id, ".");
         tokens.erase(tokens.begin());
         sub_Automatas.push_back(d_g);
     }

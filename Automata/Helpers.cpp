@@ -3,9 +3,11 @@
 //
 
 #include <fstream>
+#include <iostream>
 #include "Definition.h"
 #include "Helpers.h"
 #include "Definitions_Table.h"
+#include "../Parser/Construct_Automata.h"
 
 static Helpers* instance ;
 
@@ -34,16 +36,16 @@ vector<string> Helpers::getHelpers() {
     return this->helpers;
 }
 
-Graph* Helpers::mergeGraphs(Graph *graph_1, Graph *graph_2, string helper) {
+Graph* Helpers::mergeGraphs(Graph *graph_1, Graph *graph_2, string helper, int* id) {
 
     if(helper == "|")
-        return mergeOr(graph_1, graph_2);
+        return mergeOr(graph_1, graph_2, id);
     if(helper == "*")
-        return mergeAst(graph_1);
+        return mergeAst(graph_1, id);
     if(helper == "\\+")
-        return mergePlus(graph_1);
+        return mergePlus(graph_1, id);
     if(helper == ".")
-        return mergeCont(graph_1, graph_2);
+        return mergeCont(graph_1, graph_2, id);
 
 
     return NULL;
@@ -51,7 +53,7 @@ Graph* Helpers::mergeGraphs(Graph *graph_1, Graph *graph_2, string helper) {
 
 }
 
-Graph *Helpers::mergeOr(Graph *pGraph, Graph *graph_2) {
+Graph *Helpers::mergeOr(Graph *pGraph, Graph *graph_2, int* i) {
     if(graph_2 == NULL)
         return pGraph;
     if(pGraph == NULL)
@@ -67,13 +69,10 @@ Graph *Helpers::mergeOr(Graph *pGraph, Graph *graph_2) {
     end_first->setStatus(N_ACC);
     end_second->setStatus(N_ACC);
 
-    int i = max(end_first->getId(), end_second->getId()) + 1+1;
-    Node* new_end = new Node(i);
-    new_end->setStatus(id);
-
-    i = i-1;
-    Node* new_start = new Node(i);
+    Node* new_start = new Node((*i)++);
     new_start->setStatus(N_ACC);
+    Node* new_end = new Node((*i)++);
+    new_end->setStatus(id);
 
     Graph* g = pGraph;
     g->mergeGraph(graph_2->getEdges(), graph_2->getAllstates());
@@ -90,7 +89,7 @@ Graph *Helpers::mergeOr(Graph *pGraph, Graph *graph_2) {
     return g;
 }
 
-Graph *Helpers::mergePlus(Graph *pGraph) {
+Graph *Helpers::mergePlus(Graph *pGraph, int* i) {
     if(pGraph == NULL)
         return pGraph;
     Node* start_state = pGraph->getStartState();
@@ -98,13 +97,14 @@ Graph *Helpers::mergePlus(Graph *pGraph) {
     string id;
     id = end_state->getStatus() + "+";
     end_state->setStatus(N_ACC);
-    int i = end_state->getId() +1+1;
-    Node* new_end = new Node(i);
+    //int i = end_state->getId() +1+1;
+    Node* new_start = new Node((*i)++);
+    new_start->setStatus(N_ACC);
+    Node* new_end = new Node((*i)++);
     new_end->setStatus(id);
 
-    i = i-1;
-    Node* new_start = new Node(i);
-    new_start->setStatus(N_ACC);
+   // i = i-1;
+
 
     Graph* g = pGraph;
     g->addEdge(new_start, start_state,w);
@@ -115,11 +115,11 @@ Graph *Helpers::mergePlus(Graph *pGraph) {
     return g;
 }
 
-Graph *Helpers::mergeAst(Graph *pGraph) {
+Graph *Helpers::mergeAst(Graph *pGraph, int* i) {
     if(pGraph == NULL)
         return pGraph;
 
-    Graph* g = mergePlus(pGraph);
+    Graph* g = mergePlus(pGraph, i);
     string id;
     id = g->getEndState()->getStatus();
     id = id.substr(0, id.size()-1) + "*";
@@ -151,11 +151,13 @@ Graph *Helpers::mergeAst(Graph *pGraph) {
     return g;
 }
 
-Graph *Helpers::mergeCont(Graph *pGraph, Graph *graph_2) {
+Graph *Helpers::mergeCont(Graph *pGraph, Graph *graph_2, int* i) {
     if(graph_2 == NULL)
         return pGraph;
     if(pGraph == NULL)
         return graph_2;
+
+
     //the end state of pGraph will be the start state of graph_2 by add an edge between them its weight is eps and set it as N_ACC
     Node* start_first = pGraph->getStartState();
     Node* start_second = graph_2->getStartState();
