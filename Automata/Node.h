@@ -9,7 +9,6 @@
 #include "Edge.h"
 #include <vector>
 using namespace std;
-#define N_ACC "n"
 class Node {
 private:
     int id;

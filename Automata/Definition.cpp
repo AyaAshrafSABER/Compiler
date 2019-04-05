@@ -3,6 +3,7 @@
 //
 
 #include "Definition.h"
+#include "Definitions_Table.h"
 #include <stack>
 Definition::Definition(Graph* def) {
     definition = def;
