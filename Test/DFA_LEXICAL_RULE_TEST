@@ -1,0 +1,5 @@
+Zero = 0
+One = 1
+L1: Zero (Zero Zero)*
+L2 : (One One)*
+

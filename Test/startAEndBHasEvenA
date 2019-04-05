@@ -1,0 +1,3 @@
+A = a
+B = b
+L1 = AB*A(B | AB*A)*B 
