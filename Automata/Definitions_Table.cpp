@@ -11,7 +11,7 @@ Definitions_Table::Definitions_Table() {
     g->setStart(n);
     g->setEnd(n);
     g->getStartState()->setStatus("eps");
-    this->insertInMap("EPS", new Definition(g));
+    this->insertInMap(EPS, new Definition(g));
 }
 Definitions_Table* Definitions_Table::getInstance() {
     if(instance == NULL) {
