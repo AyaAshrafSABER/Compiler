@@ -8,7 +8,7 @@
 #include <string>
 #include <map>
 #include "Definition.h"
-#define EPS "EPS"
+#define EPS "eps"
 #define N_ACC "n"
 
 using namespace std;

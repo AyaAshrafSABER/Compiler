@@ -60,7 +60,7 @@ string DFA::getNodeStatus(set<Node*> set) {
 }
 
 void DFA::testDFA() {
-    cout << "Def    " << "  1   " << "  2   " << "..." <<endl;
+    cout << "Def    " << "      1   " << "        2   " << "..." <<endl;
     for (vector<pair <Node*,  map<Definition*,Node*>>>::iterator it = transitionStateTable.begin() ; it != transitionStateTable.end(); ++it) {
         map<Definition*, Node*> map = (*it).second;
         cout<<(*it).first->getId()<<"    ";
@@ -121,16 +121,20 @@ DFA::DFA() {
             }
             returnedSetOfEachDefinition.insert(eps.begin(), eps.end());
             if(returnedSetOfEachDefinition.empty()) {
-//                if (dummyState == NULL) {
-//                    dummyState = new Node(id);
-//                    id++;
-//                    dummyState->setStatus(N_ACC);
-//                    map<string, Definition*> definitions = Definitions_Table::getInstance()->getTable();
-//                    for (map<string, Definition*>::iterator it = definitions.begin(); it != definitions.end(); ++it) {
-//                        transitionStateTable[itVector].second.insert(make_pair(it->second, dummyState));
-//                    }
-//                }
-//                transitionStateTable[itVector].second.insert(make_pair(itDef->second, dummyState));
+                if (dummyState == NULL) {
+                    dummyState = new Node(id);
+                    dummyState->setStatus(N_ACC);
+                    map<string, Definition*> definitions = Definitions_Table::getInstance()->getTable();
+                    transitionStateTable.push_back(make_pair(dummyState, map<Definition *, Node *>()));
+                    for (map<string, Definition*>::iterator it = definitions.begin(); it != definitions.end(); ++it) {
+                        if(it->second == Eps) {
+                            continue;
+                        }
+                        transitionStateTable[id].second.insert(make_pair((*it).second, dummyState));
+                    }
+                    id++;
+                }
+                transitionStateTable[itVector].second.insert(make_pair(itDef->second, dummyState));
                 //TODO check example el sheet 2 types of dummy nodes
                 continue;
             }
