@@ -57,7 +57,10 @@ bool Construct_Automata::constructAutomata(string line) {
 
 }
 Graph* Construct_Automata::constructNFASubGraph(vector<string> tokens) {
-    return recurseBuild(tokens, &nfa_id);
+    Graph* d_g = recurseBuild(tokens, &nfa_id);
+    insertDef(d_g->getEdges());
+
+    return d_g;
 }
 
 Graph* Construct_Automata::recurseBuild(vector<string> tokens, int* i) {
@@ -80,7 +83,7 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int* i) {
     }
 
     if(h == "*" || h == "\\+") {
-        if(!(temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' )) {
+        if(!(temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' ) && def_t->getDefinitions(temp) == NULL) {
             h = helperValue(&tokens);
         } else {
             d_g = merge->mergeGraphs(d_g, NULL, h, i);
@@ -101,7 +104,7 @@ bool Construct_Automata::constructDefinition(string id, vector<string> definitio
     Graph* g = recurseBuild(definition, &def_id);
     g->getEndState()->setStatus(id);
     def_id = g->getEndState()->getId()+1;
-   testGraph(g);
+  // testGraph(g);
     def_t->insertInMap(id, new Definition(g));
 }
 
@@ -112,13 +115,15 @@ bool Construct_Automata::constructNFA() {
     Node* new_start = new Node(nfa_id);
 
     for (int i = 0; i <sub_Automatas.size() ; ++i) {
+       // cout<<"Graph #" << i << endl << "-----------------------" << endl;
+
+     //   testGraph(sub_Automatas[i]);
         nfa->mergeGraph(sub_Automatas[i]->getEdges(), sub_Automatas[i]->getAllstates());
         nfa->addEdge(new_start, sub_Automatas[i]->getStartState(), eps);
     }
     nfa->setStart(new_start);
     NFA* n = NFA::getInstance();
     n->setAutomata(nfa);
-    testGraph(n->getAutomata());
     return true;
 }
 
@@ -277,11 +282,13 @@ Graph* Construct_Automata::getCont(Graph *d_g, vector<string> *tokens, int *i) {
 }
 
 void Construct_Automata::constructKeyWords(vector<string> tokens) {
-    for (int i = 0; i < tokens.size(); ++i) {
+    while (!tokens.empty()) {
         Helpers* merge = Helpers::getInstance();
-        Graph* d_g = splitToken(tokens[i], &nfa_id, ".");
+        Graph* d_g = splitToken(tokens.front(), &nfa_id, ".");
+        d_g->getEndState()->setStatus(tokens.front());
         tokens.erase(tokens.begin());
         sub_Automatas.push_back(d_g);
+        insertDef(d_g->getEdges());
     }
 
     return;
@@ -289,13 +296,26 @@ void Construct_Automata::constructKeyWords(vector<string> tokens) {
 }
 
 void Construct_Automata::constructPunct(vector<string> tokens) {
-    for (int i = 0; i < tokens.size(); ++i) {
+    while (!tokens.empty()) {
         Helpers* merge = Helpers::getInstance();
         Graph* d_g = createGraph(tokens.front(), &nfa_id);
+        d_g->getEndState()->setStatus(tokens.front());
         tokens.erase(tokens.begin());
         sub_Automatas.push_back(d_g);
+        insertDef(d_g->getEdges());
+
     }
 
 
     return;
+}
+
+void Construct_Automata::insertDef(vector<Edge *> edges) {
+    for (int i = 0; i < edges.size(); ++i) {
+        Definition* d = edges[i]->getWeight();
+        if(def_t->getDefinitions(d->getDef()->getEndState()->getStatus()) == NULL) {
+            def_t->insertInMap(d->getDef()->getEndState()->getStatus(), d);
+        }
+    }
+
 }

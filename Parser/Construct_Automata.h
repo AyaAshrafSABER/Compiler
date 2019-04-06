@@ -57,6 +57,8 @@ public:
     void constructKeyWords(vector<string> tokens);
 
     void constructPunct(vector<string> tokens);
+
+    void insertDef(vector<Edge *> edges);
 };
 
 
