@@ -16,7 +16,7 @@ public:
     static NFA* getInstance();
     Graph* getAutomata();
     bool setAutomata(Graph* graph);
-    void read_input();
+    void read_input(string path);
 
 
 };
