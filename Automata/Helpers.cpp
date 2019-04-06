@@ -14,7 +14,7 @@ static Helpers* instance ;
 
 Helpers::Helpers() {
     Definitions_Table* def_t = Definitions_Table::getInstance();
-    ifstream infile("/home/saraheldafrawy/CLionProjects/Compiler/Automata/Helpers.txt");
+    ifstream infile("Helpers.txt");
     string line;
     if(infile.is_open()) {
         while (getline(infile, line)) {

@@ -8,8 +8,6 @@
 #include <string>
 #include <map>
 #include "Definition.h"
-#define EPS "eps"
-#define N_ACC "n"
 
 using namespace std;
 class Definitions_Table {
@@ -21,6 +19,7 @@ public:
     void insertInMap(string id, Definition* definition);
     map<string, Definition*> getTable();
     Definition* getDefinitions(string id);
+    void test_Definitions();
 
 };
 
