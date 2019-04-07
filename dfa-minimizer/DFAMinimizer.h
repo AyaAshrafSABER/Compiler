@@ -29,6 +29,9 @@ private:
     set<Node*> NotAccepted;
     vector<set<Node*>> previousPartition;
     vector<set<Node*>> nextPartition;
+    Node* startState;
+
+private:
     void setFirstPartition(set<Node*> *Acc, set<Node*>* Not_Acc, vector<set<Node*>> *partitions);
     void partitioning(DFA* dfa, vector<set<Node*>>*pre, vector<set<Node*>> *next);
     void partitioningHelper(DFA* dfa, vector<set<Node*>>*pre,vector<set<Node*>>*next);
@@ -36,11 +39,13 @@ private:
     bool areEquivalentStates(DFA* dfa , vector<set<Node*>> *P, Node* A , Node *B);
     bool isEqualPartition(vector<set<Node*>> *P,vector<set<Node*>> *N);
     void buildMinimumeDFA(DFA* dfa,vector<pair<Node*, map<Definition*, Node*>>>*ret, vector<set<Node*>> *nextPartition);
-
 public:
+    Node *getStartState() const;
+
+    void setStartState(Node *startState);
     /* Static access method. */
     static DFAMinimizer* getInstance();
-    vector<pair<Node*,map<Definition*,Node*>>> getMinimizedDFA();
+    vector<pair<Node*,map<Definition*,Node*>>> *getMinimizedDFA();
     void printMinimizedDFA();
 
 };

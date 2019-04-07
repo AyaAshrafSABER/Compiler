@@ -12,8 +12,8 @@ DFAMinimizer::DFAMinimizer()
     this->dfa = DFA::getInstance();
     this->setFirstPartition(&this->Accepted,&this->NotAccepted,&this->previousPartition);
     this->partitioning(this->dfa, &this->previousPartition, &this->nextPartition);
-    //ToDo construct minimized state table
     this->buildMinimumeDFA(this->dfa,&this->minimizedTransitionStateTable, &this->previousPartition);
+    this->printMinimizedDFA();
 }
 
 DFAMinimizer* DFAMinimizer::getInstance()
@@ -134,6 +134,16 @@ bool DFAMinimizer::areEquivalentStates(DFA* dfa , vector<set<Node*>> *P, Node* A
     return  true;
 }
 void DFAMinimizer::printMinimizedDFA(){
+    vector<pair<Node*, map<Definition*, Node*>>>* min = this->getMinimizedDFA();
+    cout << "Def    " << "      1   " << "        2   " << "..." <<endl;
+    for (vector<pair <Node*,  map<Definition*,Node*>>>::iterator it = min->begin() ; it != min->end(); ++it) {
+        map<Definition*, Node*> map = (*it).second;
+        cout<<(*it).first->getId()<<"    ";
+        for (std::map<Definition*, Node*>::iterator itDef = map.begin(); itDef != map.end(); ++itDef) {
+            cout<<"     "<<(*itDef).second->getId()<<"       ";
+        }
+        cout<<(*it).first->getStatus()<<"    "<<endl;
+    }
 
 
 }
@@ -145,13 +155,10 @@ bool DFAMinimizer::isEqualPartition(vector<set<Node*>> *P,vector<set<Node*>> *N)
     return true;
 }
 
-std::vector<std::pair<Node*, std::map<Definition*,Node*>>>  DFAMinimizer::getMinimizedDFA(){
-    return this->minimizedTransitionStateTable;
+std::vector<std::pair<Node*, std::map<Definition*,Node*>>>*  DFAMinimizer::getMinimizedDFA(){
+    return &this->minimizedTransitionStateTable;
 }
 void DFAMinimizer::buildMinimumeDFA(DFA* dfa,vector<pair<Node*, map<Definition*, Node*>>>*ret, vector<set<Node*>> *nextPartition){
-    //m7taga a3raf el start node mn 3and sara
-//constructe qraph -> create new node for each
-//for each def go to the node in the set give it the pointer to the new node
     vector<pair<Node*, map<Definition*,Node*>>> transitionStateTable = this->dfa->getDFA();
     vector<pair<Node*, map<Definition*,Node*>>>::iterator ptrTT ;
     map<set<Node*>, Node*> minDFA;
@@ -160,11 +167,52 @@ void DFAMinimizer::buildMinimumeDFA(DFA* dfa,vector<pair<Node*, map<Definition*,
     int counter = 0;
     for (auto ptrP = nextPartition->begin(); ptrP != nextPartition->end(); ++ptrP){
         Node* node = new Node(counter);
+        for(auto ptrS = *ptrP->begin(); ptrS != *ptrP->end(); ++ptrS) {
+            if (ptrS->getId() == 0) {
+                this->setStartState(node);
+                break;
+            }
+        }
         auto ptrS = *ptrP->begin();
         node->setStatus(ptrS->getStatus());
         minDFA[*ptrP] = node;
-        cout<<"Node "<< counter<<" Status "<<node->getStatus()<<endl;
-        counter++;
+         counter++;
+    }
+    cout<< "start state "<< this->getStartState()->getId()<<endl;
+    map<set<Node*>, Node*>::iterator itMap;
+    for(auto itMap = minDFA.begin(); itMap != minDFA.end(); ++itMap){
+        auto ptrS = *itMap->first.begin(); //node
+        map<Definition*, Node*> values;
+        for(auto ptrTT = transitionStateTable.begin();ptrTT != transitionStateTable.end();++ptrTT) {
+            Node* temp = ptrTT->first;
+            if (temp == ptrS) {
+                values = ptrTT->second;
+                break;
+            }
+        }
+        map<Definition*, Node*>::iterator itDef;
+        map<Definition*, Node*> tAfterMin;
+        for(auto itDef = values.begin();itDef != values.end();++itDef) {
+            for(auto itMap = minDFA.begin(); itMap != minDFA.end(); ++itMap){
+                set<Node*>::iterator it1 = itMap->first.find(itDef->second);
+                if (it1 != itMap->first.end()){
+                    tAfterMin[itDef->first]=itMap->second;
+                    break;
+                }
+            }
+        }
+        pair<Node*,map<Definition*, Node*>> pair1;
+        pair1.first =  itMap->second;
+        pair1.second = tAfterMin;
+        ret->push_back(pair1);
     }
 
+}
+
+Node *DFAMinimizer::getStartState() const {
+    return startState;
+}
+
+void DFAMinimizer::setStartState(Node *startState) {
+    DFAMinimizer::startState = startState;
 }
