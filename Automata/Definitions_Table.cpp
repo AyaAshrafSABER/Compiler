@@ -2,7 +2,10 @@
 // Created by sohayla on 24/03/19.
 //
 
+#include <iostream>
 #include "Definitions_Table.h"
+#include "../Parser/Construct_Automata.h"
+
 static Definitions_Table* instance;
 
 Definitions_Table::Definitions_Table() {
@@ -32,4 +35,16 @@ Definition* Definitions_Table::getDefinitions(string id) {
 
 map<string, Definition*> Definitions_Table::getTable() {
     return this->definitions;
+}
+void Definitions_Table::test_Definitions() {
+    map<string, Definition*>::iterator it;
+    Construct_Automata * c = new Construct_Automata();
+
+    for ( it = definitions.begin(); it != definitions.end(); it++ )
+    {
+        std::cout << it->first  // string (key)
+                  << ":" << endl;
+                   c->testGraph(it->second->getDef()) ; // string's value
+                  cout << std::endl ;
+    }
 }

@@ -40,12 +40,23 @@ vector<string> Tokenizing::getTokens(string line, char del) {
 
     return  tokens;
 }
+std::string to_hex(char ch) {
+    std::ostringstream b;
+    b << "\\x" << std::setfill('0') << std::setw(2) << std::setprecision(2)
+      << std::hex << static_cast<unsigned int>(ch & 0xff);
+    return b.str();
+}
+
 
 void Tokenizing::parseString(string str) {
     string temp;
     string build = "";
     for (int i = 0; i < str.length() ; ++i) {
-        char c = str.at(i);
+        char c = static_cast<char>(str.at(i));
+        if(!((c > 32) && (c < 127)))
+            continue;
+        if(iscntrl(c))
+            continue;
         if(c == '+') {
             if(build == "\\"){
                 build.clear();

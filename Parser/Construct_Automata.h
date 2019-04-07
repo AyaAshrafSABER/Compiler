@@ -44,9 +44,9 @@ public:
 
     Graph *createGraph(string basic_string, int *pInt);
 
-    Graph *splitToken(string basic_string, int *pInt);
+    Graph *splitToken(string basic_string, int *pInt, string h);
 
-    Graph *createGraph(vector<string> *pVector, string basic_string, int *pInt);
+    Graph *createGraph(vector<string> *pVector, string basic_string, int *pInt, string h);
     Graph* createGraphFromExistingDefintition(Definition* def, int* i, string temp) ;
 
 
@@ -57,6 +57,8 @@ public:
     void constructKeyWords(vector<string> tokens);
 
     void constructPunct(vector<string> tokens);
+
+    void insertDef(vector<Edge *> edges);
 };
 
 

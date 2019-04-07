@@ -18,6 +18,8 @@ bool Read_Input::read_file() {
     vector<string> lineTokens;
     if(infile.is_open()) {
         while (getline(infile, line)) {
+            if(line.length() == 0 || line == " ")
+                continue;
             automata_c.constructAutomata(line);
         }
         automata_c.constructNFA();
