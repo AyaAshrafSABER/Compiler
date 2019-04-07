@@ -195,7 +195,7 @@ void DFA::BFS(Node* start) {
         vector<Edge*> edges = start->getOutwardEdges();
         for (vector<Edge*>::iterator it = edges.begin() ; it != edges.end(); ++it) {
             if (visited.find((*it)->getDestination()->getId()) == visited.end()) {
-                visited.insert(make_pair((*it)->getDestination()->getId(),true));
+                visited.insert(make_pair((*it)->getDestination()->getId(), true));
                 queue.push_back((*it)->getDestination());
                 insertNewStateInInitialTable((*it)->getDestination());
             }
