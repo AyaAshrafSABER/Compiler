@@ -71,8 +71,13 @@ void Tokenizing::parseString(string str) {
             temp = string(1, c);
         }
         if(build == "\\"){
-            tokens.push_back(build + temp);
+            if(temp == "=") {
+                tokens.push_back(temp);
+            } else {
+                tokens.push_back(build + temp);
+            }
             build.clear();
+
         } else if (std::find(helpers.begin(), helpers.end(), temp) != helpers.end()) {
             if(build.length() > 0)
                 tokens.push_back(build);

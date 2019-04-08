@@ -12,6 +12,8 @@ Graph::Graph() {
 }
 
 bool Graph::addEdge(Node *source, Node *Destination, Definition *weight) {
+    if(this->getTargetNode(source, weight )== Destination)
+        return false;
     if(find(states.begin(), states.end(), source) == states.end())
         this->states.push_back(source);
     if(find(states.begin(), states.end(),Destination ) == states.end())
@@ -79,3 +81,4 @@ void Graph::mergeGraph(vector<Edge *> edges, vector<Node *> states) {
         this->states.push_back(states[i]);
     }
 }
+

@@ -10,8 +10,8 @@ static NFA* instance;
 NFA::NFA() {
 
 }
-void NFA::read_input(string path) {
-    Read_Input *t = new Read_Input(path);
+void NFA::read_input() {
+    Read_Input *t = new Read_Input("Description.txt");
     t->read_file();
 }
 

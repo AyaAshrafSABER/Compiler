@@ -3,6 +3,7 @@
 //
 
 #include "Definition.h"
+#include "Definitions_Table.h"
 #include <stack>
 Definition::Definition(Graph* def) {
     definition = def;
@@ -28,18 +29,19 @@ bool Definition::contains(string input) {
                return isdigit(input.at(0));
            }
 
-       } else if(check== "eps"){//ask about it
+       } else if(check == EPS){//ask about it
             return true;
        } else if(check == input) {
            return true;
        }
         return false;
-    } else {
+    }
+    /*else {
         Node* dest = DFS(this->getDef()->getStartState(), this->getDef()->getAllstates().size(), input);
         if(dest->getStatus() == N_ACC)
             return false;
         return true;
-    }
+    }*/
 }
 Node* Definition::DFS(Node* start, int numberOfStates, string input) {
 
@@ -68,3 +70,5 @@ Node* Definition::DFS(Node* start, int numberOfStates, string input) {
         }
     }
 }
+
+

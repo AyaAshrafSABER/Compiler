@@ -23,10 +23,9 @@ class Construct_Automata {
 private:
     vector<Graph*> sub_Automatas;
     Definitions_Table* def_t;
-    int def_id = 1;
+    int priority = 1;
     int nfa_id = 1;
-    list<string> helpers;
-    int node_id;
+    map<string, vector<string>> complexDefinitions;
 public:
     Construct_Automata();
     bool constructAutomata(string line);
@@ -50,7 +49,7 @@ public:
     Graph* createGraphFromExistingDefintition(Definition* def, int* i, string temp) ;
 
 
-        void testGraph(Graph *pGraph);
+    void testGraph(Graph *pGraph);
 
     Graph* getCont(Graph *d_g, vector<string> *tokens, int *i);
 
@@ -59,6 +58,9 @@ public:
     void constructPunct(vector<string> tokens);
 
     void insertDef(vector<Edge *> edges);
+ //   bool check_complex(vector<string> tokens);
+
+  //  string mergeString(vector<string> tokens);
 };
 
 

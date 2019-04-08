@@ -28,6 +28,7 @@ public :
     Graph *mergeAst(Graph *pGraph, int* id);
 
     Graph *mergeCont(Graph *pGraph, Graph *graph_2, int* id);
+
     bool isAhelper(string s);
 };
 

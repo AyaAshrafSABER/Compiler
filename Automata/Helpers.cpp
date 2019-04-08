@@ -36,6 +36,8 @@ vector<string> Helpers::getHelpers() {
     return this->helpers;
 }
 
+
+
 Graph* Helpers::mergeGraphs(Graph *graph_1, Graph *graph_2, string helper, int* id) {
 
     if(helper == "|")

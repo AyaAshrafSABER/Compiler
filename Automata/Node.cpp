@@ -8,6 +8,7 @@
 Node::Node(int id) {
     this->id = id;
     this->status = N_ACC;
+    priority = -1;
 }
 
 vector<Edge*> Node::getInwardEdges() {
@@ -41,4 +42,11 @@ bool Node::insertEdge(Edge *edge, bool in) {
 
 int Node::getId() {
     return id;
+}
+
+void Node::setPriority(int p) {
+    this->priority = p;
+}
+int Node::getPriority() {
+    return  this->priority;
 }

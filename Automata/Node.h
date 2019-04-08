@@ -16,6 +16,7 @@ private:
     vector<Edge*> inwardEdges;
     vector<Edge*> outwardEdges;
     string status;
+    int priority;
 public:
     Node(int id);
     vector<Edge*> getInwardEdges();
@@ -24,6 +25,8 @@ public:
     string getStatus();
     void setStatus(string st);
     int getId();
+    void setPriority(int p);
+    int getPriority();
 
 };
 
