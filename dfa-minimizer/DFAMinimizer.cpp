@@ -101,6 +101,9 @@ bool DFAMinimizer::areEquivalentStates(DFA* dfa , vector<set<Node*>> *P, Node* A
     if (A == B) {
         return true;
     }
+    if (A->getStatus().compare(B->getStatus()) != 0) {
+        return false;
+    }
     vector<pair<Node*, map<Definition*,Node*>>> TT = dfa->getDFA();
     vector<pair<Node*, map<Definition*, Node*>>>::iterator ptr ;
     map<Definition*,Node*> a_map;
@@ -135,14 +138,14 @@ bool DFAMinimizer::areEquivalentStates(DFA* dfa , vector<set<Node*>> *P, Node* A
 }
 void DFAMinimizer::printMinimizedDFA(){
     vector<pair<Node*, map<Definition*, Node*>>>* min = this->getMinimizedDFA();
-    cout << "Def    " << "      1   " << "        2   " << "..." <<endl;
+    cout << "Def  " << " 1   " << "2   " << "..." <<endl;
     for (vector<pair <Node*,  map<Definition*,Node*>>>::iterator it = min->begin() ; it != min->end(); ++it) {
         map<Definition*, Node*> map = (*it).second;
-        cout<<(*it).first->getId()<<"    ";
+        cout<<(*it).first->getId()<<":";
         for (std::map<Definition*, Node*>::iterator itDef = map.begin(); itDef != map.end(); ++itDef) {
-            cout<<"     "<<(*itDef).second->getId()<<"       ";
+            cout<<" "<<(*itDef).second->getId()<<" ";
         }
-        cout<<(*it).first->getStatus()<<"    "<<endl;
+        cout<<(*it).first->getStatus()<<endl;
     }
 
 
