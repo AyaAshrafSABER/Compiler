@@ -158,27 +158,28 @@ bool DFAMinimizer::isEqualPartition(vector<set<Node*>> *P,vector<set<Node*>> *N)
 std::vector<std::pair<Node*, std::map<Definition*,Node*>>>*  DFAMinimizer::getMinimizedDFA(){
     return &this->minimizedTransitionStateTable;
 }
-void DFAMinimizer::buildMinimumeDFA(DFA* dfa,vector<pair<Node*, map<Definition*, Node*>>>*ret, vector<set<Node*>> *nextPartition){
+void DFAMinimizer::buildMinimumeDFA(DFA* dfa,vector<pair<Node*, map<Definition*, Node*>>>*ret, vector<set<Node*>> *partition){
     vector<pair<Node*, map<Definition*,Node*>>> transitionStateTable = this->dfa->getDFA();
-    vector<pair<Node*, map<Definition*,Node*>>>::iterator ptrTT ;
+    vector<pair<Node*, map<Definition*,Node*>>>::iterator ptrTT = transitionStateTable.begin();
     map<set<Node*>, Node*> minDFA;
     vector<set<Node*>>::iterator ptrP ;
     set<Node*>::iterator ptrS;
+    Node* s = ptrTT->first;
     int counter = 0;
-    for (auto ptrP = nextPartition->begin(); ptrP != nextPartition->end(); ++ptrP){
-        Node* node = new Node(counter);
-        for(auto ptrS = *ptrP->begin(); ptrS != *ptrP->end(); ++ptrS) {
-            if (ptrS->getId() == 0) {
-                this->setStartState(node);
-                break;
-            }
+    for (auto ptrP = partition->begin(); ptrP != partition->end(); ++ptrP) {
+        Node *node = new Node(counter);
+        set<Node *>::iterator it = ptrP->find(s);
+        if (it != ptrP->end()) {
+            this->setStartState(node);
+            cout<< "Start state "<< this->getStartState()->getId()<<endl;
+
         }
+
         auto ptrS = *ptrP->begin();
         node->setStatus(ptrS->getStatus());
         minDFA[*ptrP] = node;
-         counter++;
+        counter++;
     }
-    cout<< "start state "<< this->getStartState()->getId()<<endl;
     map<set<Node*>, Node*>::iterator itMap;
     for(auto itMap = minDFA.begin(); itMap != minDFA.end(); ++itMap){
         auto ptrS = *itMap->first.begin(); //node
