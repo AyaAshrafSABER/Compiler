@@ -60,7 +60,7 @@ bool Construct_Automata::constructAutomata(string line) {
 }
 Graph* Construct_Automata::constructNFASubGraph(vector<string> tokens) {
     Graph* d_g = recurseBuild(tokens, &nfa_id);
-    insertDef(d_g->getEdges());
+    //insertDef(d_g->getEdges());
 
     return d_g;
 }
@@ -103,6 +103,8 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int* i) {
 bool Construct_Automata::constructDefinition(string id, vector<string> definition) {
    // if(check_complex(definition)) {
         complexDefinitions.insert(pair<string, vector<string>>(id, definition));
+        defVisited.insert(pair<string, bool >(id, false));
+
      //   return false;
     //} else {
       //  string de = mergeString(definition);
@@ -124,18 +126,17 @@ bool Construct_Automata::constructNFA() {
     Definition* eps = def_t->getDefinitions(EPS);
 
     Node* new_start = new Node(nfa_id);
-
+    nfa->setStart(new_start);
     for (int i = 0; i <sub_Automatas.size() ; ++i) {
         // cout<<"Graph #" << i << endl << "-----------------------" << endl;
 
-          testGraph(sub_Automatas[i]);
+         // testGraph(sub_Automatas[i]);
         nfa->mergeGraph(sub_Automatas[i]->getEdges(), sub_Automatas[i]->getAllstates());
         nfa->addEdge(new_start, sub_Automatas[i]->getStartState(), eps);
     }
-    nfa->setStart(new_start);
     NFA* n = NFA::getInstance();
     n->setAutomata(nfa);
-   // testGraph(nfa);
+   testGraph(nfa);
     return true;
 }
 
@@ -189,6 +190,8 @@ Graph *Construct_Automata::createGraph(string temp, int *i) {
     d_g->addEdge(n1, n2, w);
     d_g->setStart(n1);
     d_g->setEnd(n2);
+    def_t->insertInMap(temp, w);
+
     return d_g;
 }
 
@@ -217,6 +220,8 @@ Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int 
     if(complexDefinitions.count(temp)) {
         Graph* g = recurseBuild(complexDefinitions[temp], i);
         g->getEndState()->setStatus(temp);
+        //defVisited[temp] = true;
+
         return g;
     }
     Definition *d;
@@ -235,6 +240,7 @@ Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int 
                 tokens->erase(tokens->begin());
                 temp += tokens->front();
                 tokens->erase(tokens->begin());
+                createGraph(tokens, temp, i, h);
             }
         }
         return createGraph(temp, i);
@@ -335,7 +341,7 @@ void Construct_Automata::constructKeyWords(vector<string> tokens) {
         d_g->getEndState()->setPriority(0);
         tokens.erase(tokens.begin());
         sub_Automatas.push_back(d_g);
-        insertDef(d_g->getEdges());
+        //insertDef(d_g->getEdges());
     }
 
     return;
@@ -351,7 +357,7 @@ void Construct_Automata::constructPunct(vector<string> tokens) {
 
         tokens.erase(tokens.begin());
         sub_Automatas.push_back(d_g);
-        insertDef(d_g->getEdges());
+        //insertDef(d_g->getEdges());
 
     }
 

@@ -26,6 +26,7 @@ private:
     int priority = 1;
     int nfa_id = 1;
     map<string, vector<string>> complexDefinitions;
+    map<string, bool > defVisited;
 public:
     Construct_Automata();
     bool constructAutomata(string line);
