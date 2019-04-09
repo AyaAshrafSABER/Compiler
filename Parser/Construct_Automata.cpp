@@ -130,13 +130,13 @@ bool Construct_Automata::constructNFA() {
     for (int i = 0; i <sub_Automatas.size() ; ++i) {
         // cout<<"Graph #" << i << endl << "-----------------------" << endl;
 
-        // testGraph(sub_Automatas[i]);
+        testGraph(sub_Automatas[i]);
         nfa->mergeGraph(sub_Automatas[i]->getEdges(), sub_Automatas[i]->getAllstates());
         nfa->addEdge(new_start, sub_Automatas[i]->getStartState(), eps);
     }
     NFA* n = NFA::getInstance();
     n->setAutomata(nfa);
-    testGraph(nfa);
+    // testGraph(nfa);
     return true;
 }
 
@@ -227,8 +227,18 @@ Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int 
         Graph* g = recurseBuild(complexDefinitions[temp], i);
         g->getEndState()->setStatus(temp);
         //defVisited[temp] = true;
-
         return g;
+    }
+    if (temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' ) {
+        if (!tokens->empty() || temp.find("-") != string::npos) {
+            vector<string> expanded;
+            if ((tokens->front() == "\\-" && temp.length() == 1)) {
+                temp += tokens->front();
+                tokens->erase(tokens->begin());
+                temp += tokens->front();
+                tokens->erase(tokens->begin());
+            }
+        }
     }
     Definition *d;
     if(temp == "\\L") {
@@ -417,14 +427,14 @@ Graph *Construct_Automata::expandedGraph(string temp, int *i) {
     result = new Graph();
     result->setStart(new_start);
     result->setEnd(new_end);
-    for (int i = 0; i <subGraphs.size() ; ++i) {
-        // cout<<"Graph #" << i << endl << "-----------------------" << endl;
+    for (int j = 0; j <subGraphs.size() ; ++j) {
+        cout<<"Graph #" << i << endl << "-----------------------" << endl;
 
-        // testGraph(sub_Automatas[i]);
-        result->mergeGraph(subGraphs[i]->getEdges(), subGraphs[i]->getAllstates());
-        result->addEdge(new_start, subGraphs[i]->getStartState(), def_t->getDefinitions(EPS));
-        subGraphs[i]->getEndState()->setStatus(N_ACC);
-        result->addEdge(subGraphs[i]->getEndState(), new_end, def_t->getDefinitions(EPS));
+        //  testGraph(sub_Automatas[j]);
+        result->mergeGraph(subGraphs[j]->getEdges(), subGraphs[j]->getAllstates());
+        result->addEdge(new_start, subGraphs[j]->getStartState(), def_t->getDefinitions(EPS));
+        subGraphs[j]->getEndState()->setStatus(N_ACC);
+        result->addEdge(subGraphs[j]->getEndState(), new_end, def_t->getDefinitions(EPS));
     }
     // testGraph(result);
     return result;
