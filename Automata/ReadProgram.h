@@ -9,7 +9,7 @@
 
 #include "Definition.h"
 #include "Node.h"
-#include "DFAMinimizer.h"
+#include "../dfa-minimizer/DFAMinimizer.h"
 
 
 using namespace std;

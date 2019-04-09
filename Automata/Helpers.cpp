@@ -14,7 +14,7 @@ static Helpers* instance ;
 
 Helpers::Helpers() {
     Definitions_Table* def_t = Definitions_Table::getInstance();
-    ifstream infile("Helpers.txt");
+    ifstream infile(R"(F:\2nd semester third year\2nd Semester\1 Compilers\4 Labs\Compiler\Automata\Helpers.txt)");
     string line;
     if(infile.is_open()) {
         while (getline(infile, line)) {

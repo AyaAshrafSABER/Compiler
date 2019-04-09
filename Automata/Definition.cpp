@@ -4,6 +4,7 @@
 
 #include "Definition.h"
 #include "Definitions_Table.h"
+#include <iostream>
 #include <stack>
 Definition::Definition(Graph* def) {
     definition = def;
@@ -20,16 +21,11 @@ Graph* Definition::getDef() {
 bool Definition::contains(string input) {
     if(definition->getAllstates().size() == 1){
        string check = definition->getEndState()->getStatus();
-       if(check.find("-") != string::npos && check != "\\-") {
-           if(check.at(0) == 'a') {
-               return islower(input.at(0));
-           } else if(check.at(0) == 'A') {
-               return isupper(input.at(0));
-           } else if(check.at(0) == '0') {
-               return isdigit(input.at(0));
-           }
-
-       } else if(check == EPS){//ask about it
+        cout<<"check:" << check << "input :   " << input<<endl;
+       if(check.at(0) == '\\') {
+           check = string(1,check.at(1));
+       }
+       if(check == EPS){//ask about it
             return true;
        } else if(check == input) {
            return true;

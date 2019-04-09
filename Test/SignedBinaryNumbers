@@ -1,5 +1,4 @@
 Zero = 0
 One = 1
 sign = + | -
-L1: (sign| \L) (Zero |One) (Zero|One)*
-
+L1: (sign | \L) (Zero | One) (Zero | One)*
