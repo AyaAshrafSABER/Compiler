@@ -85,7 +85,7 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int* i) {
     }
 
     if(h == "*" || h == "\\+") {
-        if(!(temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' ) && def_t->getDefinitions(temp) == NULL) {
+        if(!(temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' ) && !this->complexDefinitions.count(temp)) {
             h = helperValue(&tokens);
         } else {
             d_g = merge->mergeGraphs(d_g, NULL, h, i);
