@@ -38,7 +38,8 @@ private:
     void distinguishStates(DFA* dfa,vector<set<Node*>> *P , vector<set<Node*>> *n, set<Node*> curr);
     bool areEquivalentStates(DFA* dfa , vector<set<Node*>> *P, Node* A , Node *B);
     bool isEqualPartition(vector<set<Node*>> *P,vector<set<Node*>> *N);
-    void buildMinimumeDFA(DFA* dfa,vector<pair<Node*, map<Definition*, Node*>>>*ret, vector<set<Node*>> *partition);
+    void buildMinimizedDFA(DFA* dfa,vector<pair<Node*, map<Definition*, Node*>>>*ret, vector<set<Node*>> *partition);
+    void findStartState(Node *old, Node *current, set<Node *> &set1);
 public:
     Node *getStartState() const;
 
