@@ -240,7 +240,7 @@ Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int 
                 tokens->erase(tokens->begin());
                 temp += tokens->front();
                 tokens->erase(tokens->begin());
-                createGraph(tokens, temp, i, h);
+                return createGraph(tokens, temp, i, h);
             }
         }
         return createGraph(temp, i);
@@ -269,8 +269,11 @@ void Construct_Automata::testGraph(Graph *g) {
     for (int j = 0; j < edges.size(); ++j) {
 
 
-        cout << "Edge Weight type " << edges[j]->getWeight()->getDef()->getEndState()->getStatus() <<
-             " from" << edges[j]->getSource()->getId() << " to " << edges[j]->getDestination()->getId() << endl;
+        cout << "Edge Weight type ";
+        printf("%p\n",  (edges[j]->getWeight()));
+
+
+           cout<<  " from" << edges[j]->getSource()->getId() << " to " << edges[j]->getDestination()->getId() << endl;
 
 
 
