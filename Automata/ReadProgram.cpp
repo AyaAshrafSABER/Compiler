@@ -79,6 +79,7 @@ void ReadProgram::readFile() {
 }
 
 Node* ReadProgram::getNextState(Node* currentState, char inputChar) {
+    string input = "" + inputChar;
     map <Definition*, Node*> transitions;
     vector<pair<Node*, map<Definition*, Node*>>>::iterator it;
     for (it = (*transition_table).begin() ; it != (*transition_table).end(); ++it) {
@@ -87,7 +88,7 @@ Node* ReadProgram::getNextState(Node* currentState, char inputChar) {
         }
     }
     for (map<Definition*, Node*>::iterator it = transitions.begin(); it != transitions.end(); ++it) {
-        if ((*it).first->contains(inputChar)) {
+        if ((*it).first->contains(input)) {
             return (*it).second;
         }
     }
