@@ -50,22 +50,30 @@ set<Node*> DFA::getEpsilonClosure(Node *start) {
     return setReturned;
 }
 
-string DFA::getNodeStatus(set<Node*> set) {
+Node* DFA::getNodeStatus(set<Node*> set) {
+    int priority = -1;
+    Node* returnedState = new Node(-1);
     for (std::set<Node*>::iterator it = set.begin(); it != set.end(); ++it) {
         if((*it)->getStatus() != N_ACC) {
-            return (*it)->getStatus();
+            if (priority == -1) {
+                priority = (*it)->getPriority();
+                returnedState = (*it);
+            } else if((*it)->getPriority() < priority) {
+                priority = (*it)->getPriority();
+                returnedState = (*it);
+            }
         }
     }
-    return N_ACC;
+    return returnedState;
 }
 
 void DFA::testDFA() {
-    cout << "Def    " << "      1   " << "        2   " << "..." <<endl;
     for (vector<pair <Node*,  map<Definition*,Node*>>>::iterator it = transitionStateTable.begin() ; it != transitionStateTable.end(); ++it) {
         map<Definition*, Node*> map = (*it).second;
-        cout<<(*it).first->getId()<<"    ";
+        cout<<(*it).first->getId()<<(*it).first->getStatus()<<"       ";
         for (std::map<Definition*, Node*>::iterator itDef = map.begin(); itDef != map.end(); ++itDef) {
-            cout<<"     "<<(*itDef).second->getId()<<"       ";
+            cout<<(*itDef).first->getDef()->getStartState()->getStatus()<<"  ";
+            cout<<"     "<<(*itDef).second->getId()<< (*itDef).second->getStatus()<<"       ";
         }
         cout<< endl;
     }
@@ -82,8 +90,8 @@ int DFA::tableContainsTheSameState(set<Node *> state) {
 
 DFA::DFA() {
     NFA* nfa = NFA::getInstance();
+    nfa->read_input();
     Graph* graph = nfa->getAutomata();
-
     Node* start = graph->getStartState();
     //initiate initialStateTable
     BFS(start);
@@ -136,16 +144,17 @@ DFA::DFA() {
                     id++;
                 }
                 transitionStateTable[itVector].second.insert(make_pair(itDef->second, dummyState));
-                //TODO check example el sheet 2 types of dummy nodes
                 continue;
             }
             if (int idOfState = tableContainsTheSameState(returnedSetOfEachDefinition)) {
                 Node *stateInDefinition = transitionStateTable[idOfState].first;
                 transitionStateTable[itVector].second.insert(make_pair(itDef->second, stateInDefinition));
             } else {
-                Node *state = new Node(id);
+                Node* state = new Node(id);
                 id++;
-                state->setStatus(getNodeStatus(returnedSetOfEachDefinition));
+                Node* highestPriorityState = getNodeStatus(returnedSetOfEachDefinition);
+                state->setStatus(highestPriorityState->getStatus());
+                state->setPriority(highestPriorityState->getPriority());
                 transitionStateTable[itVector].second.insert(make_pair(itDef->second, state));
                 transitionStateTable.push_back(make_pair(state, map<Definition *, Node *>()));
                 stateMappingTable.push_back(returnedSetOfEachDefinition);
@@ -153,7 +162,6 @@ DFA::DFA() {
         }
     }
     //TODO set memory free for all data structures unused
-    //TODO test graph cout
     testDFA();
 }
 
