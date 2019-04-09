@@ -59,9 +59,12 @@ public:
     void constructPunct(vector<string> tokens);
 
     void insertDef(vector<Edge *> edges);
- //   bool check_complex(vector<string> tokens);
+    //   bool check_complex(vector<string> tokens);
 
-  //  string mergeString(vector<string> tokens);
+    //  string mergeString(vector<string> tokens);
+    vector<string> expandDef(string def);
+
+    Graph *expandedGraph(string tokens, int *i);
 };
 
 

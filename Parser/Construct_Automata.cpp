@@ -101,23 +101,23 @@ Graph* Construct_Automata::recurseBuild(vector<string> tokens, int* i) {
 
 }
 bool Construct_Automata::constructDefinition(string id, vector<string> definition) {
-   // if(check_complex(definition)) {
-        complexDefinitions.insert(pair<string, vector<string>>(id, definition));
-        defVisited.insert(pair<string, bool >(id, false));
+    // if(check_complex(definition)) {
+    complexDefinitions.insert(pair<string, vector<string>>(id, definition));
+    defVisited.insert(pair<string, bool >(id, false));
 
-     //   return false;
+    //   return false;
     //} else {
-      //  string de = mergeString(definition);
-        //Node* n = new Node(def_id++);
-        //n->setStatus(de);
-        //Graph* g = new Graph();
-        //g->setStart(n);
-        //g->setEnd(n);
-        //def_t->insertInMap(id, new Definition(g));
-        //testGraph(g);
+    //  string de = mergeString(definition);
+    //Node* n = new Node(def_id++);
+    //n->setStatus(de);
+    //Graph* g = new Graph();
+    //g->setStart(n);
+    //g->setEnd(n);
+    //def_t->insertInMap(id, new Definition(g));
+    //testGraph(g);
     //}
-   /* Graph* g = recurseBuild(definition, &def_id);
-    g->getEndState()->setStatus(id);*/
+    /* Graph* g = recurseBuild(definition, &def_id);
+     g->getEndState()->setStatus(id);*/
     return true;
 }
 
@@ -130,13 +130,13 @@ bool Construct_Automata::constructNFA() {
     for (int i = 0; i <sub_Automatas.size() ; ++i) {
         // cout<<"Graph #" << i << endl << "-----------------------" << endl;
 
-         // testGraph(sub_Automatas[i]);
+        // testGraph(sub_Automatas[i]);
         nfa->mergeGraph(sub_Automatas[i]->getEdges(), sub_Automatas[i]->getAllstates());
         nfa->addEdge(new_start, sub_Automatas[i]->getStartState(), eps);
     }
     NFA* n = NFA::getInstance();
     n->setAutomata(nfa);
-   testGraph(nfa);
+    testGraph(nfa);
     return true;
 }
 
@@ -177,20 +177,26 @@ string Construct_Automata::helperValue(vector<string> *pVector) {
 }
 
 Graph *Construct_Automata::createGraph(string temp, int *i) {
+
+    Definition *w = def_t->getDefinitions(temp);
+    if(w == NULL) {
+        Graph* g = new Graph();
+        Node *n3 = new Node(1);
+        g->setStart(n3);
+        g->setEnd(n3);
+        g->getStartState()->setStatus(temp);
+        w = new Definition(g);
+        def_t->insertInMap(temp, w);
+
+    }
     Graph* d_g = new Graph();
     Node *n1 = new Node((*i)++);
     Node *n2 = new Node((*i)++);
     n2->setStatus(temp);
-    Graph* g = new Graph();
-    Node *n3 = new Node(1);
-    g->setStart(n3);
-    g->setEnd(n3);
-    g->getStartState()->setStatus(temp);
-    Definition *w = new Definition(g);
+
     d_g->addEdge(n1, n2, w);
     d_g->setStart(n1);
     d_g->setEnd(n2);
-    def_t->insertInMap(temp, w);
 
     return d_g;
 }
@@ -234,13 +240,16 @@ Graph *Construct_Automata::createGraph(vector<string> *tokens, string temp, int 
     if (d != NULL) {
         return createGraphFromExistingDefintition(d,i, temp);
     } else if (temp.length() == 1 ||temp.find("-") != string::npos|| temp.at(0) == '\\' ) {
-        if(!tokens->empty()) {
-            if(tokens->front() == "\\-" && temp.length() ==  1) {
+        if(!tokens->empty() || temp.find("-") != string::npos) {
+            vector<string> expanded;
+            if((tokens->front() == "\\-" && temp.length() ==  1 )) {
                 temp += tokens->front();
                 tokens->erase(tokens->begin());
                 temp += tokens->front();
                 tokens->erase(tokens->begin());
-                return createGraph(tokens, temp, i, h);
+                return expandedGraph( temp, i);
+            } else if( temp.find("-") != string::npos && temp.length() == 4) {
+                return expandedGraph(temp, i);
             }
         }
         return createGraph(temp, i);
@@ -269,11 +278,7 @@ void Construct_Automata::testGraph(Graph *g) {
     for (int j = 0; j < edges.size(); ++j) {
 
 
-        cout << "Edge Weight type ";
-        printf("%p\n",  (edges[j]->getWeight()));
-
-
-           cout<<  " from" << edges[j]->getSource()->getId() << " to " << edges[j]->getDestination()->getId() << endl;
+        cout << "Edge Weight type " << edges[j]->getWeight()->getDef()->getEndState()->getStatus() << " from" << edges[j]->getSource()->getId() << " to " << edges[j]->getDestination()->getId() << endl;
 
 
 
@@ -364,7 +369,7 @@ void Construct_Automata::constructPunct(vector<string> tokens) {
 
     }
 
-   priority++;
+    priority++;
     return;
 }
 
@@ -376,6 +381,53 @@ void Construct_Automata::insertDef(vector<Edge *> edges) {
         }
     }
 
+}
+
+vector<string> Construct_Automata::expandDef(string def) {
+    vector<string> seglist;
+    std::stringstream test(def);
+    string segment;
+    while(std::getline(test, segment, '-'))
+    {
+        seglist.push_back(segment);
+    }
+
+    char start = seglist[0].at(0);
+    char end = seglist[1].at(0);
+    vector<string> result;
+    while (start <= end) {
+        result.push_back(string(1,start++));
+    }
+    return result;
+}
+
+Graph *Construct_Automata::expandedGraph(string temp, int *i) {
+    vector<string> tokens =  expandDef(temp);
+    vector<Graph*> subGraphs;
+    Graph* result;
+    while (!tokens.empty()) {
+        Graph* d_g = createGraph(tokens.front(), i);
+        d_g->getEndState()->setStatus(tokens.front());
+        tokens.erase(tokens.begin());
+        subGraphs.push_back(d_g);
+    }
+    Node* new_start = new Node((*i)++);
+    Node* new_end = new Node((*i)++);
+    new_end->setStatus(temp);
+    result = new Graph();
+    result->setStart(new_start);
+    result->setEnd(new_end);
+    for (int i = 0; i <subGraphs.size() ; ++i) {
+        // cout<<"Graph #" << i << endl << "-----------------------" << endl;
+
+        // testGraph(sub_Automatas[i]);
+        result->mergeGraph(subGraphs[i]->getEdges(), subGraphs[i]->getAllstates());
+        result->addEdge(new_start, subGraphs[i]->getStartState(), def_t->getDefinitions(EPS));
+        subGraphs[i]->getEndState()->setStatus(N_ACC);
+        result->addEdge(subGraphs[i]->getEndState(), new_end, def_t->getDefinitions(EPS));
+    }
+    // testGraph(result);
+    return result;
 }
 
 /*string Construct_Automata::mergeString(vector<string> tokens) {
