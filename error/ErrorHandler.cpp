@@ -3,3 +3,5 @@
 //
 
 #include "ErrorHandler.h"
+
+const std::string ErrorHandler::errors[] = {"Lexical Error,Match Not Found!"};

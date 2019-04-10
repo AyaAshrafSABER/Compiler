@@ -34,7 +34,7 @@ void ReadProgram::writeOutputFile() {
     for (int i = 0; i < tokens.size(); i++) {
         if(tokens[i].at(0) == '\\' && tokens[i].size() > 1)
             tokens[i] = tokens[i].at(1);
-        cout << tokens[i] << endl;
+       // cout << tokens[i] << endl;
         outfile << tokens[i] << endl;
     }
     outfile.close();
@@ -55,10 +55,8 @@ void ReadProgram::readFile() {
                 int lastInd = -1;
                 int startInd = 0;
                 for (int j = 0; j < lineTokens[i].length(); j++) {
+
                     nextState = getNextState(nextState, lineTokens[i].at(j));
-                    if (nextState != nullptr){
-                        cout<<nextState->getStatus()<<endl;
-                    }
                     if(lineTokens[i] == " ") {
                         continue;
                     }
@@ -70,6 +68,7 @@ void ReadProgram::readFile() {
                         || (j == lineTokens[i].length() - 1 && nextState->getStatus() == N_ACC)) {
                         if (lastInd > -1 && lastAcc != nullptr){
                             tokens.push_back(lastAcc->getStatus());
+                            cout<<lastAcc->getStatus()<<endl;
                             lastAcc = NULL;
                             startInd = lastInd;
                             j = lastInd;
@@ -77,6 +76,8 @@ void ReadProgram::readFile() {
                         }
                         else {
                             tokens.push_back("Not Matched");
+                            cout<<"Not Matched"<<endl;
+
                             if (startInd != 0) {
                                 j = startInd + 1;
                                 lastInd = j;
@@ -86,6 +87,7 @@ void ReadProgram::readFile() {
                     }
                     else if (j == lineTokens[i].length() - 1 && nextState->getStatus() != N_ACC){
                         tokens.push_back(nextState->getStatus());
+                        cout<<lastAcc->getStatus()<<endl;
                     }
                 }
             }

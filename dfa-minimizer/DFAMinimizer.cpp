@@ -47,7 +47,7 @@ void DFAMinimizer::partitioning(DFA* dfa, vector<set<Node*>> *pre, vector<set<No
 
      this->partitioningHelper(dfa, pre,next);
      while (!(this->isEqualPartition(pre, next))) {
-        cout<<"size of next partition "<< next->size() <<endl;
+      //  cout<<"size of next partition "<< next->size() <<endl;
         pre->clear();
          for (auto &ptr : *next) {
              pre->push_back(ptr);
@@ -74,10 +74,10 @@ void DFAMinimizer::distinguishStates(DFA* dfa,vector<set<Node*>>* P,vector<set<N
     set<Node*> set2;
     for (auto B : curr) {
         if (!areEquivalentStates(dfa,P,A,B)) {
-            cout<<" Not Eq "<<endl;
+          // cout<<" Not Eq "<<endl;
             set2.insert(B);
         }else {
-            cout<<" Eq  "<<endl;
+           // cout<<" Eq  "<<endl;
             set1.insert(B);
         }
     }
@@ -91,8 +91,8 @@ void DFAMinimizer::distinguishStates(DFA* dfa,vector<set<Node*>>* P,vector<set<N
 
 
 bool DFAMinimizer::areEquivalentStates(DFA* dfa , vector<set<Node*>> *P, Node* A, Node *B){
-    cout<<"Node "<<A->getId();
-    cout<<" Node "<<B->getId();
+   // cout<<"Node "<<A->getId();
+   // cout<<" Node "<<B->getId();
     if (A == B) {
         return true;
     }
@@ -129,11 +129,18 @@ bool DFAMinimizer::areEquivalentStates(DFA* dfa , vector<set<Node*>> *P, Node* A
     return  true;
 }
 void DFAMinimizer::printMinimizedDFA(){
+    map<string,Definition*> DT = Definitions_Table::getInstance()->getTable();
+    int counter = 0;
+    cout << "Def  ";
+    for (auto ptr2 = DT.begin(); ptr2 != DT.end() && counter < DT.size() - 1; ++ptr2) {
+        cout << " " << ptr2->first;
+        counter++;
+    }
     vector<pair<Node*, map<Definition*, Node*>>>* min = this->getMinimizedDFA();
-    cout << "Def  " << " 1   " << "2   " << "..." <<endl;
+    cout<< "  Accepted" <<endl;
     for (auto &it : *min) {
         map<Definition*, Node*> map = it.second;
-        cout<< it.first->getId()<<":";
+        cout<< it.first->getId()<<":   ";
         for (auto &itDef : map) {
             cout<<" "<< itDef.second->getId()<<" ";
         }
