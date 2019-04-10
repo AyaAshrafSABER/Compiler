@@ -32,7 +32,7 @@ void ReadProgram::writeOutputFile() {
     ofstream outfile;
     outfile.open("tokens.txt");
     for (int i = 0; i < tokens.size(); i++) {
-        if(tokens[i].at(0) == '\\' && tokens[i].size() > )
+        if(tokens[i].at(0) == '\\' && tokens[i].size() > 1)
             tokens[i] = tokens[i].at(1);
         cout << tokens[i] << endl;
         outfile << tokens[i] << endl;
@@ -53,6 +53,7 @@ void ReadProgram::readFile() {
                 Node *nextState = dfa->getStartState();
                 Node *lastAcc = NULL;
                 int lastInd = -1;
+                int startInd = 0;
                 for (int j = 0; j < lineTokens[i].length(); j++) {
                     nextState = getNextState(nextState, lineTokens[i].at(j));
                     if (nextState != nullptr){
@@ -67,13 +68,19 @@ void ReadProgram::readFile() {
                     }
                     if ((nextState == NULL)
                         || (j == lineTokens[i].length() - 1 && nextState->getStatus() == N_ACC)) {
-                        if (lastInd > -1){
+                        if (lastInd > -1 && lastAcc != nullptr){
                             tokens.push_back(lastAcc->getStatus());
                             lastAcc = NULL;
+                            startInd = lastInd;
                             j = lastInd;
+                            lastInd = -1;
                         }
                         else {
                             tokens.push_back("Not Matched");
+                            if (startInd != 0) {
+                                j = startInd + 1;
+                                lastInd = j;
+                            }
                         }
                         nextState = dfa->getStartState();
                     }

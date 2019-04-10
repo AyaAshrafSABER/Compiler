@@ -70,10 +70,10 @@ Node* DFA::getNodeStatus(set<Node*> set) {
 void DFA::testDFA() {
     for (vector<pair <Node*,  map<Definition*,Node*>>>::iterator it = transitionStateTable.begin() ; it != transitionStateTable.end(); ++it) {
         map<Definition*, Node*> map = (*it).second;
-        cout<<(*it).first->getId()<<(*it).first->getStatus()<<"       ";
+        cout<<(*it).first->getId()<<(*it).first->getStatus()<<" ";
         for (std::map<Definition*, Node*>::iterator itDef = map.begin(); itDef != map.end(); ++itDef) {
             cout<<(*itDef).first->getDef()->getStartState()->getStatus()<<"  ";
-            cout<<"     "<<(*itDef).second->getId()<< (*itDef).second->getStatus()<<"       ";
+            cout<<" "<<(*itDef).second->getId()<< " ";
         }
         cout<< endl;
     }
