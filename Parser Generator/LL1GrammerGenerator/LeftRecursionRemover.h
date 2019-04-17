@@ -1,0 +1,14 @@
+//
+// Created by TARGET on 4/17/2019.
+//
+
+#ifndef COMPILER_LEFTRECURSIONREMOVER_H
+#define COMPILER_LEFTRECURSIONREMOVER_H
+
+
+class LeftRecursionRemover {
+
+};
+
+
+#endif //COMPILER_LEFTRECURSIONREMOVER_H
