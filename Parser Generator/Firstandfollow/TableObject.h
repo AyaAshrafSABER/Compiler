@@ -17,12 +17,8 @@ public:
     TableObject(int index, string value);
     void setIndex(int index);
     void setValue(string val);
-
     int getIndex();
     string getValue();
-
-
-
 };
 
 

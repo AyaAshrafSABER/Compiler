@@ -5,11 +5,14 @@
 #include "Firstandfollow_tables.h"
 static Firstandfollow_tables* instance;
 Firstandfollow_tables::Firstandfollow_tables() {
-    //TODO Initialize map with empty vector
+    CFG * cfg = CFG::getInstance();
+    non_terminals = cfg->getNonTerminal();
+    initializeMap();
+
 }
 
 Firstandfollow_tables *Firstandfollow_tables::getInstance() {
-    if(instance == NULL){
+    if(instance == nullptr){
         instance = new Firstandfollow_tables();
     }
     return instance;
@@ -30,4 +33,15 @@ map<string, vector<TableObject*>> Firstandfollow_tables::getFollow() {
 
 map<string, vector<TableObject*>> Firstandfollow_tables::getFirst() {
     return this->first;
+}
+
+void Firstandfollow_tables::initializeMap() {
+    auto it = non_terminals.begin();
+    while (it != non_terminals.end())
+    {
+        first.insert(pair<string, vector<TableObject*>>((*it), vector<TableObject*>()));
+        follow.insert(pair<string, vector<TableObject*>>((*it), vector<TableObject*>()));
+        it++;
+    }
+
 }
