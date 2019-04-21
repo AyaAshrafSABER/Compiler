@@ -123,7 +123,7 @@ bool CFGParser::read_file(CFG* grammer) {
     }
         currPro.push_back(currRule);
         grammer->insetRule(currTerminal, currPro);
-        grammer->insertTerminal(currTerminal);
+        grammer->insetNonTerminal(currTerminal);
 
     return true;
 
@@ -152,12 +152,9 @@ void CFGParser::throwError(string error) {
 }
 
 bool CFGParser::checkNonTerminal(set<string> tokens, CFG *cfg) {
-    set<string> nonTerminal = cfg->getInstance()->getNonTerminal();
     for (auto s :tokens) {
-        auto it = nonTerminal.find(s);
-        if (it == nonTerminal.end()) {
-            throwError(ErrorHandler::errors[ErrorHandler::NotNonTerminal]);
-        }
+       bool t = cfg->getInstance()->IsNonTerminal(s);
+       if (!t) throwError(ErrorHandler::errors[ErrorHandler::NotNonTerminal]);
     }
     return true;
 }
