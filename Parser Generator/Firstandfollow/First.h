@@ -28,6 +28,10 @@ public:
     bool checkIfEpsOccurs(vector<string>  firsts);
 
     void insertFirstsIntoMap(string non_t, int index, vector<string> firsts);
+
+    void testFirst();
+
+    string vectorTostring(vector<string> &vector);
 };
 
 
