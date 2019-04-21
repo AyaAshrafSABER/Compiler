@@ -1,5 +1,5 @@
 //
-// Created by TARGET on 4/17/2019.
+// Created by AYA OSMAN on 4/17/2019.
 //
 
 #ifndef COMPILER_CFG_H
@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 #include <map>
+
+#define EPSILON "\\L"
+
 using namespace std;
 class CFG {
 private:
@@ -42,6 +45,13 @@ public:
     const map<string, vector<vector<string>>> &getProduction() const;
 
     void setProduction(const map<string, vector<vector<string>>> &production);
+
+    void insetRule(string key, vector<vector<string>>);
+
+    void insertTerminal(string terminal);
+    void insetNonTerminal(string nonTerminal);
+
+    bool IsNonTerminal(string word);
 
 };
 

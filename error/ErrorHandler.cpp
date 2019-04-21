@@ -4,4 +4,5 @@
 
 #include "ErrorHandler.h"
 
-const std::string ErrorHandler::errors[] = {"Lexical Error,Match Not Found!"};
+const std::string ErrorHandler::errors[] = {"Lexical Error,Match Not Found!", "Grammer Error,Wrong Rule",
+                                            "Grammer Error, Not Complete Grammer"};

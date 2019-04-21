@@ -1,11 +1,21 @@
 //
-// Created by TARGET on 4/17/2019.
+// Created by AYA OSMAN on 4/17/2019.
 //
 
 #include "CFG.h"
 
+CFG* CFG::instance;
+
 CFG::CFG()
 {
+}
+CFG* CFG::getInstance()
+{
+    if (instance == nullptr)
+    {
+        instance = new CFG();
+    }
+    return instance;
 }
 
 const set <string> &CFG::getNonTerminal() const {
@@ -39,3 +49,22 @@ const map<string, vector<vector<string>>> &CFG::getProduction() const {
 void CFG::setProduction(const map<string, vector<vector<string>>> &production) {
     CFG::production = production;
 }
+
+void CFG::insetRule(string key, vector<vector<string>> productions){
+    CFG::production.insert(pair<string,vector<vector<string>>>(key,productions));
+}
+
+void CFG::insertTerminal(string terminal){
+    CFG::terminal.insert(terminal);
+
+}
+
+void CFG::insetNonTerminal(string nonTerminal){
+    CFG::nonTerminal.insert(nonTerminal);
+}
+
+bool CFG::IsNonTerminal(string word){
+    auto it1 = CFG::nonTerminal.find(word);
+    return it1 != CFG::nonTerminal.end() ? true : false;
+}
+

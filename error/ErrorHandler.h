@@ -12,6 +12,8 @@ public:
 
     enum Error {
         lexicalError,
+        NotCompleteGrammer,
+        NotNonTerminal
 
     };
     static const std::string errors[];
