@@ -23,12 +23,13 @@ class CFGParser {
 private:
     string filename;
     CFG* grammer;
-    vector<string> nonTerminalOnRHS;
+    set<string> nonTerminalOnRHS;
 
     bool read_file(CFG* grammer);
     vector <string> splitBySpaces(string line);
     string trim(string word);
     void throwError(string error);
+    bool checkNonTerminal(set<string> tokens, CFG* cfg);
 public:
     CFGParser(string filename);
 };

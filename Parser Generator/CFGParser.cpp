@@ -8,8 +8,10 @@
 CFGParser::CFGParser(string filename){
     this->filename = filename;
     this->read_file(this->grammer);
+    this->checkNonTerminal(this->nonTerminalOnRHS, this->grammer);
 }
 
+//handle starting with # or |
 bool CFGParser::read_file(CFG* grammer) {
 
     ifstream infile(this->filename);
@@ -62,7 +64,7 @@ bool CFGParser::read_file(CFG* grammer) {
                             currRule.push_back(temp);
 
                         } else if (words[i].at(0) != TERMINAL && words[i].at(words[i].size() - 1) != TERMINAL) {
-                            CFGParser::nonTerminalOnRHS.push_back(words[i]); // to be check if it terminal
+                            CFGParser::nonTerminalOnRHS.insert(words[i]); // to be check if it terminal
                             currRule.push_back(words[i]);
 
                         } else {
@@ -84,8 +86,10 @@ bool CFGParser::read_file(CFG* grammer) {
                 for (int i = 0; i < currRule.size(); i++) {
                     nextRule.push_back(currRule.at(i));
                 }
-                currPro.push_back(nextRule);
-                currRule.clear();
+                if (!nextRule.empty()) {
+                    currPro.push_back(nextRule);
+                    currRule.clear();
+                }
                 for (int i = 1; i < words.size(); i++) {
                     if (words[i] == ORING && i != 1) {
                         vector<string> nextRule;
@@ -100,7 +104,7 @@ bool CFGParser::read_file(CFG* grammer) {
                         currRule.push_back(temp);
 
                     } else if (words[i].at(0) != TERMINAL && words[i].at(words[i].size() - 1) != TERMINAL) {
-                        CFGParser::nonTerminalOnRHS.push_back(words[i]); // to be check if it terminal
+                        CFGParser::nonTerminalOnRHS.insert(words[i]); // to be check if it terminal
                         currRule.push_back(words[i]);
 
                     } else {
@@ -145,6 +149,17 @@ string CFGParser::trim(string word) {
 void CFGParser::throwError(string error) {
     cout <<error<<endl;
     exit(0);
+}
+
+bool CFGParser::checkNonTerminal(set<string> tokens, CFG *cfg) {
+    set<string> nonTerminal = cfg->getInstance()->getNonTerminal();
+    for (auto s :tokens) {
+        auto it = nonTerminal.find(s);
+        if (it == nonTerminal.end()) {
+            throwError(ErrorHandler::errors[ErrorHandler::NotNonTerminal]);
+        }
+    }
+    return true;
 }
 
 
