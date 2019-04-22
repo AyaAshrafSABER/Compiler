@@ -121,7 +121,9 @@ bool CFGParser::read_file(CFG* grammer) {
         }
 
     }
-        currPro.push_back(currRule);
+        if (!(currRule.empty())){
+            currPro.push_back(currRule);
+        }
         grammer->insetRule(currTerminal, currPro);
         grammer->insetNonTerminal(currTerminal);
 
