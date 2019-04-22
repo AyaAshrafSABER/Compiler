@@ -4,9 +4,11 @@
 
 #include "Follow.h"
 #include "First.h"
+#include "TestFirstFollow.h"
 
 Follow::Follow() {
-    cfg = CFG::getInstance();
+//    cfg = CFG::getInstance();
+    cfg = TestFirstFollow::getInstance();
     firstandfollow_tables = Firstandfollow_tables::getInstance();
     non_t_productions = cfg->getProduction();
     firsts = firstandfollow_tables->getFirst();

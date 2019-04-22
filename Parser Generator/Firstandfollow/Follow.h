@@ -8,12 +8,14 @@
 #include <CFG.h>
 #include "Firstandfollow_tables.h"
 #include "TableObject.h"
+#include "TestFirstFollow.h"
 
 using namespace std;
 
 class Follow {
 private:
-    CFG* cfg;
+//    CFG* cfg;
+    TestFirstFollow* cfg;
     Firstandfollow_tables * firstandfollow_tables;
     set<string> terminals;
     set<string> non_terminals;
