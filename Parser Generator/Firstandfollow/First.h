@@ -6,13 +6,15 @@
 #define COMPILER_FIRST_H
 
 #include "Firstandfollow_tables.h"
+#include "TestFirstFollow.h"
 #include <string>
 #define  EPS "eps"
 
 using namespace std;
 class First {
 private:
-    CFG* cfg;
+//    CFG* cfg;
+    TestFirstFollow* cfg;
     Firstandfollow_tables * first_table;
     set<string> terminals;
     set<string> non_terminals;

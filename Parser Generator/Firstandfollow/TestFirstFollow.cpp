@@ -15,8 +15,8 @@ TestFirstFollow* TestFirstFollow::getInstance() {
 
 TestFirstFollow::TestFirstFollow() {
     startSymbol = "E";
-    terminals = {"E", "E'", "T", "T'", "F"};
-    non_terminals = {"+", "*", "(", ")", "id"};
+    non_terminals = {"E", "E'", "T", "T'", "F"};
+    terminals = {"+", "*", "(", ")", "id"};
     non_t_productions = {
             {"E",  {{"T", "E'"}}},
             {"E'", {{"+", "T", "E'"}, {"eps"}}},

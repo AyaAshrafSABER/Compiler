@@ -2,6 +2,7 @@
 // Created by sohayla on 19/04/19.
 //
 
+#include <iostream>
 #include "Follow.h"
 #include "First.h"
 #include "TestFirstFollow.h"
@@ -12,13 +13,12 @@ Follow::Follow() {
     firstandfollow_tables = Firstandfollow_tables::getInstance();
     non_t_productions = cfg->getProduction();
     firsts = firstandfollow_tables->getFirst();
-    terminals = cfg->getTerminal();
     non_terminals = cfg->getNonTerminal();
     initializeFollowsMap();
     insertDollarSign();
     loopNonTerminal();
-    insertFollowsInTable();
     firstandfollow_tables->setFollowTable(follows_of_non_terminal);
+    testOutput();
 }
 
 //for each nonterminal check if it exists in production
@@ -29,9 +29,7 @@ Follow::Follow() {
 void Follow::loopNonTerminal(){
     auto itNonTerminal = non_terminals.begin();
     while (itNonTerminal != non_terminals.end()) {
-        if(visited.find(*itNonTerminal) == visited.end()) {
-            findFollowsInNonTerminal((*itNonTerminal));
-        }
+        findFollowsInNonTerminal((*itNonTerminal));
         itNonTerminal++;
     }
 }
@@ -48,7 +46,7 @@ void Follow::findFollowsInNonTerminal(string nonTerminal) {
         }
     }
 }
-
+//TODO Done
 void Follow::initializeFollowsMap() {
     auto it = non_terminals.begin();
     while (it != non_terminals.end()) {
@@ -62,35 +60,35 @@ void Follow::findFollowInProduction(vector<string> &vector, string nonTerminal, 
         if(vector[i] == nonTerminal) {
             if((i+1) == vector.size()) {
                 //2nd case
-                findFollowsInNonTerminal(leftNonTerminal);
-                std::vector<string> follows = follows_of_non_terminal.at(leftNonTerminal);
-                for (int i = 0; i < follows.size(); i++) {
-                    insertFollow(nonTerminal, follows[i]);
-                }
+                insertFollowLeftNonTerminal (leftNonTerminal, nonTerminal);
             } else if (non_terminals.find(vector[i+1]) != non_terminals.end()) {
                 //next is non terminal
                 //3rd case
                 insertFirstInFollow(vector[i+1], nonTerminal);
                 int j = i + 1;
-                while (j <vector.size() && containsEps(vector[j])) {
-                    insertFirstInFollow(vector[j+1], nonTerminal);
+                while (j < vector.size() && containsEps(vector[j])) {
+                    if (j+1 < vector.size()) {
+                        insertFirstInFollow(vector[j + 1], nonTerminal);
+                    } else {
+                        insertFollowLeftNonTerminal (leftNonTerminal, nonTerminal);
+                    }
                     j++;
                 }
             } else {
                 //terminal
                 //1st case
-                insertFollow(nonTerminal, vector[i]);
+                insertFollow(nonTerminal, vector[i+1]);
             }
         }
     }
 }
-
+//TODO Done
 void Follow::insertFollow (string nonTerminal, string terminal) {
     if (!checkIfExists(nonTerminal, terminal)) {
         follows_of_non_terminal.at(nonTerminal).push_back(terminal);
     }
 }
-
+//TODO Done
 bool Follow::checkIfExists(string nonterminal, string terminal) {
     vector<string> vector = follows_of_non_terminal.at(nonterminal);
     for(int i = 0; i < vector.size(); i++) {
@@ -100,9 +98,8 @@ bool Follow::checkIfExists(string nonterminal, string terminal) {
     }
     return false;
 }
-
+//TODO Done
 void Follow::insertDollarSign() {
-    cfg = CFG::getInstance();
     string startSymbol = cfg->getStartSymbol();
     follows_of_non_terminal.at(startSymbol).push_back("$");
 }
@@ -110,6 +107,8 @@ void Follow::insertDollarSign() {
 void Follow::insertFirstInFollow(string vector, string nonTerminal) {
     std::vector<TableObject*> firstOfNext = firsts.at(vector);
     for (int i = 0; i < firstOfNext.size(); i++) {
+        if ((*firstOfNext[i]).getValue() == EPS)
+            continue;
         insertFollow(nonTerminal, (*firstOfNext[i]).getValue());
     }
 }
@@ -122,5 +121,31 @@ bool Follow::containsEps(string nonTerminal) {
         }
     }
     return false;
+}
+
+void Follow::insertFollowLeftNonTerminal (string leftNonTerminal, string nonTerminal) {
+    findFollowsInNonTerminal(leftNonTerminal);
+    std::vector<string> follows = follows_of_non_terminal.at(leftNonTerminal);
+    for (int i = 0; i < follows.size(); i++) {
+        insertFollow(nonTerminal, follows[i]);
+    }
+}
+
+void Follow::testOutput () {
+
+    map<string, vector<string>> follow = firstandfollow_tables->getFollow();
+    auto it = follow.begin();
+    cout <<endl<< "Follows"<< endl;
+    while(it != follow.end()){
+        // Push the key in given map
+        cout <<(*it).first << " -> { ";
+        vector<string> follows = (*it).second;
+        for (int i = 0; i < follows.size(); ++i) {
+            cout<< follows[i] << " ";
+        }
+        cout<< " }" << endl;
+        it++;
+    }
+    cout<<"__________________________________________"<<endl;
 }
 
