@@ -7,6 +7,7 @@
 
 #include "Firstandfollow_tables.h"
 #include <string>
+#define  EPS "eps"
 
 using namespace std;
 class First {

@@ -5,7 +5,7 @@
 #include <algorithm>
 #include <iostream>
 #include "First.h"
-#define  EPS "eps"
+
 First::First() {
     cfg = CFG::getInstance();
     first_table = Firstandfollow_tables::getInstance();

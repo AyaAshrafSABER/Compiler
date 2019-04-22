@@ -16,14 +16,14 @@ class Firstandfollow_tables {
 private:
     set<string> non_terminals;
     map<string, vector<TableObject*>> first;
-    map<string, vector<TableObject*>> follow;
+    map<string, vector<string>> follow;
     Firstandfollow_tables();
 public:
     static Firstandfollow_tables* getInstance();
     void insertInFirst(string non_t, TableObject* object);
-    void insertInFollow(string non_t, TableObject* object);
+    void setFollowTable(map<string, vector<string>> follow);
     map<string, vector<TableObject*>> getFirst();
-    map<string, vector<TableObject*>> getFollow();
+    map<string, vector<string>> getFollow();
     void initializeMap();
 };
 

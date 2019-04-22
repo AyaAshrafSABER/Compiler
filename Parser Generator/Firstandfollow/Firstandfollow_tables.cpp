@@ -22,12 +22,12 @@ void Firstandfollow_tables::insertInFirst(string non_t, TableObject *object) {
     this->first[non_t].push_back(object);
 }
 
-void Firstandfollow_tables::insertInFollow(string non_t, TableObject *object) {
-    this->follow[non_t].push_back(object);
+void Firstandfollow_tables::setFollowTable(map<string, vector<string>> follow) {
+    this->follow = follow;
 
 }
 
-map<string, vector<TableObject*>> Firstandfollow_tables::getFollow() {
+map<string, vector<string>> Firstandfollow_tables::getFollow() {
     return this->follow;
 }
 
