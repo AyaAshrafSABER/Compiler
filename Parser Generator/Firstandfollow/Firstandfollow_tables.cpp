@@ -9,8 +9,8 @@
 static Firstandfollow_tables* instance;
 
 Firstandfollow_tables::Firstandfollow_tables() {
-//    CFG * cfg = CFG::getInstance();
-    TestFirstFollow* cfg = TestFirstFollow::getInstance();
+    CFG * cfg = CFG::getInstance();
+//    TestFirstFollow* cfg = TestFirstFollow::getInstance();
     non_terminals = cfg->getNonTerminal();
     initializeMap();
 }

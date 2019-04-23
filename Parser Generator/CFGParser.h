@@ -12,6 +12,7 @@
 #include <iostream>
 #include <vector>
 #include "../error/ErrorHandler.h"
+#include "LL1GrammerGenerator/LeftFactoringRemover.h"
 
 #define START_GRAMMER "#"
 #define ORING "|"

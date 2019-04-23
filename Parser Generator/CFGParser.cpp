@@ -4,11 +4,15 @@
 
 #include "CFGParser.h"
 
+
 //Constructor
 CFGParser::CFGParser(string filename){
     this->filename = filename;
     this->read_file(this->grammer);
     this->checkNonTerminal(this->nonTerminalOnRHS, this->grammer);
+    LeftFactoringRemover* lfr = LeftFactoringRemover::getInstance();
+    this->grammer->printProduction();
+
 }
 
 //handle starting with # or |
@@ -130,6 +134,7 @@ bool CFGParser::read_file(CFG* grammer) {
     return true;
 
     } else {
+        cout<<"error"<<endl;
         return false;
     }
 }

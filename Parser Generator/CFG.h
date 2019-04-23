@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
 
 #define EPSILON "\\L"
 
@@ -24,7 +25,6 @@ private:
     set<string> terminal;
     string startSymbol;
     map<string, vector<vector<string>>> production;
-
 
 public:
     /* Static access method. */
@@ -52,6 +52,8 @@ public:
     void insetNonTerminal(string nonTerminal);
 
     bool IsNonTerminal(string word);
+
+    void printProduction();
 
 };
 

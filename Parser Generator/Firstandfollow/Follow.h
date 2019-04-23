@@ -14,8 +14,8 @@ using namespace std;
 
 class Follow {
 private:
-//    CFG* cfg;
-    TestFirstFollow* cfg;
+    CFG* cfg;
+    //TestFirstFollow* cfg;
     Firstandfollow_tables * firstandfollow_tables;
     set<string> non_terminals;
     map<string, vector<vector<string>>> non_t_productions; //Non-terminal vector of (or)s

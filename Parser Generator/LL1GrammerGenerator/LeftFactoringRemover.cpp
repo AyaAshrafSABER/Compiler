@@ -2,10 +2,10 @@
 // Created by TARGET on 4/17/2019.
 //
 
-#include <Firstandfollow/First.h>
 #include "LeftFactoringRemover.h"
+LeftFactoringRemover* LeftFactoringRemover::instance;
 
-void LeftFactoringRemover::LeftFactoringRemover () {
+LeftFactoringRemover::LeftFactoringRemover () {
     //loop each production
     //check if it contains a vector
     //return vector index
@@ -15,26 +15,32 @@ void LeftFactoringRemover::LeftFactoringRemover () {
     // -> append the rest of the prefix and remove old vectors
     // -> create new production containing the two vectors without the prefix
     //TODO get map of production
+
+    CFG* cfg = CFG::getInstance();
+    this->non_t_productions = cfg->getProduction();
     loopProductions();
+    cfg->setProduction(this->factored_productions);
 }
 
 void LeftFactoringRemover::loopProductions() {
     auto itMap = non_t_productions.begin();
     while (itMap != non_t_productions.end()) { // left factoring for each production loop
-        string productionLabel = (*itMap).first;
         int id = 1;
-        leftFactoring(productionLabel, id, (*itMap).second);
+        leftFactoring((itMap)->first, id, (itMap)->second);
         itMap++;
     }
 }
 
 void LeftFactoringRemover::leftFactoring(string productionLabel, int id, vector<vector<string>> rightSide) {
-    bool visited[rightSide.size()] = {false};
+    bool visited[rightSide.size()];
+    for(int i = 0 ; i < rightSide.size(); i++) {
+        visited[i] = false;
+    }
     factored_productions.insert(make_pair(productionLabel, rightSide));
     for(int i = 0; i < rightSide.size(); i++) {
         if(visited[i])
             continue;
-        vector<vector<string>> groupOfSamePrefix = new vector; //should create new empty vector
+        vector<vector<string>> groupOfSamePrefix; //should create new empty vector
         groupOfSamePrefix.push_back(rightSide[i]);
         visited[i] = true;
         for (int j = i + 1; j < (rightSide.size()); j++) {
@@ -52,7 +58,8 @@ void LeftFactoringRemover::leftFactoring(string productionLabel, int id, vector<
             //-> remove from the production the two vectors and push back the new vector
             //-> call left factoring for the new production
             removeGroupedVectorsFromRightSide(rightSide, groupOfSamePrefix);
-            string newProductionLabel = productionLabel + to_string(id);
+            string newProductionLabel = productionLabel + to_string(id) + "'";
+            CFG::getInstance()->insetNonTerminal(newProductionLabel);
             int indexPrefix = recursionPrefix(rightSide);
             vector<string> modifiedVector;
             for(int i = 0; i <= indexPrefix; i++)
@@ -62,7 +69,7 @@ void LeftFactoringRemover::leftFactoring(string productionLabel, int id, vector<
             for(int i = 0; i < groupOfSamePrefix.size(); i++) {
                 groupOfSamePrefix[i].erase(groupOfSamePrefix[i].begin(), groupOfSamePrefix[i].begin() + indexPrefix);
                 if(groupOfSamePrefix[i].size() == 0) {
-                    groupOfSamePrefix[i].push_back({EPS});
+                    groupOfSamePrefix[i].push_back({EPSILON});
                 }
             }
             leftFactoring(productionLabel, id + 1, groupOfSamePrefix);
@@ -95,3 +102,12 @@ int LeftFactoringRemover::recursionPrefix (vector<vector<string>> rightSide) {
         }
     }
 }
+
+LeftFactoringRemover* LeftFactoringRemover::getInstance(){
+        if (instance == nullptr)
+        {
+            instance = new LeftFactoringRemover();
+        }
+        return instance;
+}
+

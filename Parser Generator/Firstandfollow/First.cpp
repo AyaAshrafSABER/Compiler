@@ -7,8 +7,8 @@
 #include "First.h"
 
 First::First() {
-//    cfg = CFG::getInstance();
-    TestFirstFollow* cfg = TestFirstFollow::getInstance();
+    cfg = CFG::getInstance();
+ //   TestFirstFollow* cfg = TestFirstFollow::getInstance();
     first_table = Firstandfollow_tables::getInstance();
     non_t_productions = cfg->getProduction();
     terminals = cfg->getTerminal();

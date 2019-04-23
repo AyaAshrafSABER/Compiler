@@ -68,3 +68,18 @@ bool CFG::IsNonTerminal(string word){
     return it1 != CFG::nonTerminal.end() ? true : false;
 }
 
+void CFG::printProduction(){
+    map<string, vector<vector<string>>> production = CFG::getInstance()->getProduction();
+    for(auto it = production.begin(); it != production.end(); ++it)
+    {
+        cout << it->first << " " << endl;
+        for(int i = 0; i < it->second.size(); i++){
+
+            for(int j = 0 ; j <  it->second[i].size();j++ ) {
+                cout << it->second[i][j]<<"  ";
+            }
+
+            cout<<endl<<"__________________________________________"<<endl;
+        }
+    }
+}
