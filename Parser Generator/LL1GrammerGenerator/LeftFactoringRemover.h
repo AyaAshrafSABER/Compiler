@@ -8,7 +8,7 @@
 #include <string>
 #include <vector>
 #include <map>
-#include "..\CFG.h"
+#include "CFG.h"
 
 using namespace std;
 
@@ -22,7 +22,7 @@ private:
      LeftFactoringRemover ();
     void leftFactoring(string productionLabel, int id, vector<vector<string>> rightSide);
     void loopProductions();
-    void removeGroupedVectorsFromRightSide (vector<vector<string>> rightSide, vector<vector<string>> groupOfSamePrefix);
+    void removeGroupedVectorsFromRightSide (vector<vector<string>>* rightSide, vector<vector<string>> groupOfSamePrefix);
     int recursionPrefix (vector<vector<string>> rightSide);
     public:
     static LeftFactoringRemover* getInstance();

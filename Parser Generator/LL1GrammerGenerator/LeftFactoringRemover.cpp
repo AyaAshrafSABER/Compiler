@@ -2,6 +2,7 @@
 // Created by TARGET on 4/17/2019.
 //
 
+#include <CFG.h>
 #include "LeftFactoringRemover.h"
 LeftFactoringRemover* LeftFactoringRemover::instance;
 
@@ -14,12 +15,12 @@ LeftFactoringRemover::LeftFactoringRemover () {
     // -> loop to get the rest of the prefix
     // -> append the rest of the prefix and remove old vectors
     // -> create new production containing the two vectors without the prefix
-    //TODO get map of production
 
     CFG* cfg = CFG::getInstance();
     this->non_t_productions = cfg->getProduction();
     loopProductions();
     cfg->setProduction(this->factored_productions);
+    cfg->printProduction();
 }
 
 void LeftFactoringRemover::loopProductions() {
@@ -49,7 +50,7 @@ void LeftFactoringRemover::leftFactoring(string productionLabel, int id, vector<
                 visited[j] = true;
             }
         }
-        if(groupOfSamePrefix.size() > 2) {
+        if(groupOfSamePrefix.size() > 1) {
             //start recursion and create new production
             //-> return index from recursion
             //-> get prefix and add to it new production label
@@ -57,34 +58,36 @@ void LeftFactoringRemover::leftFactoring(string productionLabel, int id, vector<
             //-> remove old production and push modified production to new map
             //-> remove from the production the two vectors and push back the new vector
             //-> call left factoring for the new production
-            removeGroupedVectorsFromRightSide(rightSide, groupOfSamePrefix);
             string newProductionLabel = productionLabel + to_string(id) + "'";
             CFG::getInstance()->insetNonTerminal(newProductionLabel);
-            int indexPrefix = recursionPrefix(rightSide);
+            int indexPrefix = recursionPrefix(groupOfSamePrefix);
             vector<string> modifiedVector;
             for(int i = 0; i <= indexPrefix; i++)
                 modifiedVector.push_back(groupOfSamePrefix[0][i]);
             modifiedVector.push_back(newProductionLabel);
             rightSide.push_back(modifiedVector);
+            removeGroupedVectorsFromRightSide((&rightSide), groupOfSamePrefix);
+            auto it = factored_productions.find(productionLabel);
+            it->second = rightSide;
             for(int i = 0; i < groupOfSamePrefix.size(); i++) {
-                groupOfSamePrefix[i].erase(groupOfSamePrefix[i].begin(), groupOfSamePrefix[i].begin() + indexPrefix);
+                groupOfSamePrefix[i].erase(groupOfSamePrefix[i].begin(), groupOfSamePrefix[i].begin() + indexPrefix+1);
                 if(groupOfSamePrefix[i].size() == 0) {
                     groupOfSamePrefix[i].push_back({EPSILON});
                 }
             }
-            leftFactoring(productionLabel, id + 1, groupOfSamePrefix);
+            leftFactoring(newProductionLabel, id + 1, groupOfSamePrefix);
         }
     }
 }
 
-void LeftFactoringRemover::removeGroupedVectorsFromRightSide (vector<vector<string>> rightSide,
+void LeftFactoringRemover::removeGroupedVectorsFromRightSide (vector<vector<string>> *rightSide,
                                                               vector<vector<string>> groupOfSamePrefix) {
     int j = 0;
-    for(int i = 0; i < rightSide.size() && j < groupOfSamePrefix.size(); i++) {
-        if(rightSide[i] == rightSide[j]) {
+    for(int i = 0; i < (*rightSide).size() && j < groupOfSamePrefix.size(); i++) {
+        if((*rightSide)[i] == groupOfSamePrefix[j]) {
             //groupOfPrefix have elements in the same order in rightside
             //so no need of checking from start again. Like sorted arrays
-            rightSide.erase(rightSide.begin()+i);
+            (*rightSide).erase((*rightSide).begin()+i);
             i--;
             j++;
         }
@@ -93,14 +96,19 @@ void LeftFactoringRemover::removeGroupedVectorsFromRightSide (vector<vector<stri
 }
 int LeftFactoringRemover::recursionPrefix (vector<vector<string>> rightSide) {
     int i = 1;
-    while (true) {
+    bool stop = false;
+    while (!stop) {
         string word = rightSide[0][i];
-        for(int j = 1; j < rightSide.size(); j++) {
-            if(i == rightSide[j].size() || rightSide[j][i] !=  word) {
-                return i -1;
+        for(int j = 0; j < rightSide.size(); j++) {
+            if (rightSide[j][i] !=  word) {
+                return i-1;
+            } else if(i == rightSide[j].size()-1) {
+                stop = true;
             }
         }
+        i++;
     }
+    return i-1;
 }
 
 LeftFactoringRemover* LeftFactoringRemover::getInstance(){
