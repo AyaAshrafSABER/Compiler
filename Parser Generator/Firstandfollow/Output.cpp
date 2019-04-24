@@ -145,6 +145,9 @@ void Output::readFile(string filename) {
     outfile.open("tokens.txt");
     if (infile.is_open()) {
         while (getline(infile, line)) {
+            if(parsingStack.top() == "$") {
+                parsingStack.push(startSymbol);
+            }
             if (line.length() == 0 || line == " ")
                 continue;
 

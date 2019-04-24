@@ -5,7 +5,7 @@
 #ifndef COMPILER_LEFTRECURSIONREMOVER_H
 #define COMPILER_LEFTRECURSIONREMOVER_H
 
-#include "..\CFG.h"
+#include "CFG.h"
 #include <string.h>
 #include <vector>
 #include <set>
