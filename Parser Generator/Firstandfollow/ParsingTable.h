@@ -12,7 +12,7 @@
 
 #define ERROR -1
 #define SYNCH -2
-#define EPS "eps"
+#define EPS "\\L"
 
 using namespace std;
 class ParsingTable {

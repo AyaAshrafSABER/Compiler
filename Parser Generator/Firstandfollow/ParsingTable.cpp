@@ -56,14 +56,16 @@ void ParsingTable::createParsingTable() {
         }
         vector<string> currentFollow = follow[*non_t_it];
         for (int k = 0; k < currentFollow.size(); ++k) {
-            if (terminalMap[currentFollow[k]] == ERROR) {
-                if (!containsEPS) {
-                    terminalMap[currentFollow[k]] = SYNCH;
-                }else{
+            if (containsEPS){
+                if (terminalMap[currentFollow[k]] == ERROR) {
                     terminalMap[currentFollow[k]] = epsProduction;
+                }else {
+                    printError();
                 }
             } else {
-                printError();
+                if (terminalMap[currentFollow[k]] == ERROR) {
+                    terminalMap[currentFollow[k]] = SYNCH;
+                }
             }
         }
         parsingTable[*non_t_it] = terminalMap;
