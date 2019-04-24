@@ -20,7 +20,7 @@ LeftFactoringRemover::LeftFactoringRemover () {
     this->non_t_productions = cfg->getProduction();
     loopProductions();
     cfg->setProduction(this->factored_productions);
-    cfg->printProduction();
+   // cfg->printProduction();
 }
 
 void LeftFactoringRemover::loopProductions() {

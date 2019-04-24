@@ -10,8 +10,10 @@ CFGParser::CFGParser(string filename){
     this->filename = filename;
     this->read_file(this->grammer);
     this->checkNonTerminal(this->nonTerminalOnRHS, this->grammer);
-    LeftFactoringRemover* lfr = LeftFactoringRemover::getInstance();
+    LeftRecursionRemover* lrr = LeftRecursionRemover::getInstance();
     this->grammer->printProduction();
+    LeftFactoringRemover* lfr = LeftFactoringRemover::getInstance();
+   // this->grammer->printProduction();
 
 }
 

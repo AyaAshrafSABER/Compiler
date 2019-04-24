@@ -70,9 +70,10 @@ bool CFG::IsNonTerminal(string word){
 
 void CFG::printProduction(){
     map<string, vector<vector<string>>> production = CFG::getInstance()->getProduction();
+    int counter = 0;
     for(auto it = production.begin(); it != production.end(); ++it)
     {
-        cout << it->first << " " << endl;
+        cout << counter <<" "<<it->first << " ->" << endl;
         for(int i = 0; i < it->second.size(); i++){
 
             for(int j = 0 ; j <  it->second[i].size();j++ ) {
@@ -81,5 +82,6 @@ void CFG::printProduction(){
 
             cout<<endl<<"__________________________________________"<<endl;
         }
+        counter++;
     }
 }

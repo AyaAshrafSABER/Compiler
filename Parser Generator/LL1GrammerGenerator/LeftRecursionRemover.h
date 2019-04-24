@@ -14,16 +14,19 @@
 using namespace std;
 class LeftRecursionRemover {
 private:
+    /* Here will be the instance stored. */
+    static LeftRecursionRemover* instance;
+    /* Private constructor to prevent instancing. */
+    LeftRecursionRemover ();
     CFG* cfg;
-    vector<vector<string>> alpha;
-    vector<vector<string>> beta;
+    int id = 0;
     void findLeftRecursion();
-    bool checkLeftRecursion (string key, vector<vector<string>> prodctions);
-    void solveLeftRecursion( vector<vector<string>> alpha,vector<vector<string>> beta);
-    string renamingNonTermial(string nonTerminal);
-    void substituteNonterminalInProductions();
+    bool checkLeftRecursion (vector<vector<string>> *alpha, vector<vector<string>> *beta, string key, vector<vector<string>> prodctions);
+    string renamingNonTerminal(string nonTerminal,int id);
+    void substituteNonterminalInProductions(vector<vector<string>> *newProduction, vector<string> currProsuction,vector<vector<string>> nextProductions);
 public:
-    LeftRecursionRemover(CFG *cfg);
+    static LeftRecursionRemover* getInstance();
+
 };
 
 
