@@ -88,7 +88,7 @@ void Output::tracing() {
                     vector<string> production = productions[top][index];
                     parsingStack.pop();
                     while (!production.empty()){
-                        if (production.back() != EPSILON) {
+                        if (production.back() != EPS) {
                             parsingStack.push(production.back());
                         }
                         production.pop_back();
@@ -158,6 +158,10 @@ void Output::readFile(string filename) {
             while (token.vec_ind < lineTokens.size()){
                 //get token
                 token = lexical->getNextToken(lineTokens, token.vec_ind, token.ch_ind);
+                string value = token.token;
+                if(value.at(0) == '\\') {
+                    token.token = string(1, value.at(1));
+                }
                 //last pushed in stack
                 string top = parsingStack.top();
                 //token is not terminal, or dollar sign, error

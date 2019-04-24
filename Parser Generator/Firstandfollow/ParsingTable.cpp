@@ -41,8 +41,7 @@ void ParsingTable::createParsingTable() {
         bool containsEPS = false;
         int epsProduction;
         for (int j = 0; j < currentFirst.size(); ++j) {
-            if (currentFirst[j]->getValue() != EPS) {
-                containsEPS = false;
+            if (currentFirst[j]->getValue() != EPS ) {
                 if (terminalMap[currentFirst[j]->getValue()] == ERROR) {
                     terminalMap[currentFirst[j]->getValue()] = currentFirst[j]->getIndex();
                 } else {
