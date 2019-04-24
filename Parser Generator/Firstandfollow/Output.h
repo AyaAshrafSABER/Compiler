@@ -30,6 +30,7 @@ public:
     void printStack();
     void error(string top, string token, int errorNum);
     bool isTerminal(string symbol);
+    void readFile(string fileName);
     //bool inNonTerminal(string stackTop);
 };
 

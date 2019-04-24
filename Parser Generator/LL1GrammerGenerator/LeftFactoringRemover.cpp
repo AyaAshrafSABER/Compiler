@@ -94,8 +94,9 @@ void LeftFactoringRemover::removeGroupedVectorsFromRightSide (vector<vector<stri
     }
 
 }
+
 int LeftFactoringRemover::recursionPrefix (vector<vector<string>> rightSide) {
-    int i = 1;
+    int i = 0;
     bool stop = false;
     while (!stop) {
         string word = rightSide[0][i];

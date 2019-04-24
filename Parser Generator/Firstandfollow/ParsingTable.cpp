@@ -9,15 +9,14 @@
 static ParsingTable* instance;
 
 ParsingTable::ParsingTable() {
-    TestFirstFollow *test = TestFirstFollow::getInstance();
+   // TestFirstFollow *test = TestFirstFollow::getInstance();
     Firstandfollow_tables* firstAndFollow = Firstandfollow_tables::getInstance();
     this->first = firstAndFollow->getFirst();
     this->follow = firstAndFollow->getFollow();
-    //CFG* cfg;
-    //cfg->getInstance();
-    this->non_t_productions = test->getProduction();
-    this->terminal = test->getTerminal();
-    this->nonTerminal = test->getNonTerminal();
+    CFG* cfg = CFG::getInstance();
+    this->non_t_productions = cfg->getProduction();
+    this->terminal = cfg->getTerminal();
+    this->nonTerminal = cfg->getNonTerminal();
     createParsingTable();
 }
 
