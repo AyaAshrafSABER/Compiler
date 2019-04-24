@@ -19,7 +19,6 @@ private:
     /* Private constructor to prevent instancing. */
     LeftRecursionRemover ();
     CFG* cfg;
-    int id = 0;
     void findLeftRecursion();
     bool checkLeftRecursion (vector<vector<string>> *alpha, vector<vector<string>> *beta, string key, vector<vector<string>> prodctions);
     string renamingNonTerminal(string nonTerminal,int id);

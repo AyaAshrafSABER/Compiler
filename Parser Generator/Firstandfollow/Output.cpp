@@ -16,21 +16,21 @@ Output::Output() {
     this->startSymbol = cfg->getStartSymbol();
     ParsingTable* table = ParsingTable::getInstance();
     this->parsingTable = table->getParsingTable();
-    //ReadProgram *prog = ReadProgram::getInstance("C:\\Users\\Adel\\CLionProjects\\Compiler\\Test\\Program");
+    ReadProgram *prog = new ReadProgram("F:\\2nd semester third year\\2nd Semester\\1 Compilers\\4 Labs\\Compiler\\Test\\Program");
     //prog->getInstance("C:\\Users\\Adel\\CLionProjects\\Compiler\\Test\\Program");
-    //this->tokens = prog->getTokens();
+    this->tokens = prog->getTokens();
     //this->tokens = table->getTokens();
     outfile.open("ParserOutput.txt");
     initialization();
-    readFile("/home/sohayla/CLionProjects/Compiler/Test/Program");
+    tracing();
+
+    //readFile("F:/2nd semester third year/2nd Semester/1 Compilers/4 Labs/Compiler/Test/Program");
 }
 
 void Output::initialization() {
     parsingStack.push("$");
     parsingStack.push(startSymbol);
-    tokens.push_back("$");
     printStack();
-    // tracing();
 }
 
 void Output::tracing() {
@@ -51,10 +51,9 @@ void Output::tracing() {
                         continue;
                     }
                     else{
-                        cout << "End of Parsing " << endl;
-                        outfile << "End of Parsing " << endl;
                         parsingStack.pop();
                         printStack();
+                        initialization();
                     }
                 }else {
                     if (top == "$"){
@@ -99,6 +98,8 @@ void Output::tracing() {
                 }
             }
         }
+        cout << "End of Parsing " << endl;
+        outfile << "End of Parsing " << endl;
     }
 }
 
@@ -118,6 +119,7 @@ void Output::printStack() {
     outfile<<endl;
 }
 
+
 void Output::error(string top, string token, int errorNum) {
     switch (errorNum) {
         case 1: cout << "ERROR : Discard " << token << endl;
@@ -136,7 +138,7 @@ bool Output::isTerminal(string symbol) {
     return terminal.find(symbol) != terminal.end();
 }
 
-void Output::readFile(string filename) {
+/*void Output::readFile(string filename) {
     ifstream infile(filename);
     ReadProgram * lexical = new ReadProgram();
     string line;
@@ -236,7 +238,7 @@ void Output::readFile(string filename) {
                     }
                 }
                 outfile << token.token << endl;
-            }
+            }*/
             /*for (int i = 0; i < lineTokens.size(); i++) {
                 Node *nextState = dfa->getStartState();
                 Node *lastAcc = NULL;
@@ -285,7 +287,7 @@ void Output::readFile(string filename) {
                     }
                 }
             }*/
-        }
+        /*}
         outfile.close();
 
     }
@@ -293,7 +295,7 @@ void Output::readFile(string filename) {
     // writeOutputFile();
 
 
-}
+}*/
 
 //bool Output::inNonTerminal(string stackTop) {
 //    return nonTerminal.find(stackTop) != nonTerminal.end();
