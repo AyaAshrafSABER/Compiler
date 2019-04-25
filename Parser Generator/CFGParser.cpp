@@ -13,7 +13,7 @@ CFGParser::CFGParser(string filename){
     LeftRecursionRemover* lrr = LeftRecursionRemover::getInstance();
     this->grammer->printProduction();
     LeftFactoringRemover* lfr = LeftFactoringRemover::getInstance();
-   // this->grammer->printProduction();
+    this->grammer->printProduction();
 
 }
 

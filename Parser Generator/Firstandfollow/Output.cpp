@@ -23,6 +23,7 @@ Output::Output() {
     outfile.open("ParserOutput.txt");
     initialization();
     tracing();
+    tokens.push_back("$");
 
     //readFile("F:/2nd semester third year/2nd Semester/1 Compilers/4 Labs/Compiler/Test/Program");
 }
@@ -34,7 +35,6 @@ void Output::initialization() {
 }
 
 void Output::tracing() {
-    while(!parsingStack.empty()){
         for(int i = 0; i < tokens.size(); i++){
             string top = parsingStack.top();
             if(!isTerminal(tokens[i]) && tokens[i] != "$"){
@@ -53,7 +53,10 @@ void Output::tracing() {
                     else{
                         parsingStack.pop();
                         printStack();
-                        initialization();
+                        if (i !=  tokens.size() - 1) {
+                            initialization();
+                        }
+                        continue;
                     }
                 }else {
                     if (top == "$"){
@@ -87,7 +90,8 @@ void Output::tracing() {
                     vector<string> production = productions[top][index];
                     parsingStack.pop();
                     while (!production.empty()){
-                        if (production.back() != EPS) {
+                        if (production.back() != EPSILON) {
+                            cout<<production.back()<<endl;
                             parsingStack.push(production.back());
                         }
                         production.pop_back();
@@ -100,7 +104,7 @@ void Output::tracing() {
         }
         cout << "End of Parsing " << endl;
         outfile << "End of Parsing " << endl;
-    }
+
 }
 
 void Output::printStack() {
