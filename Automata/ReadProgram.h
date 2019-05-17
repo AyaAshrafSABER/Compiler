@@ -19,20 +19,13 @@ private:
     vector<pair<Node*, map<Definition*, Node*>>>* transition_table;
     DFAMinimizer * dfa;
     vector<string> tokens;
-
+    vector <string> splitBySpaces(string line);
 public:
-    struct state {
-        int vec_ind = 0;
-        int ch_ind = 0;
-        string token = "";
-    };
-    ReadProgram();
+    ReadProgram(string filename);
     void readFile();
     Node* getNextState(Node* nextState, char input);
     void writeOutputFile();
-    state getNextToken(vector<string> line, int v_ind, int ch_ind);
-    vector <string> splitBySpaces(string line);
-
+    vector<string> getTokens();
 };
 
 

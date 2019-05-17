@@ -79,9 +79,9 @@ void CFG::printProduction(){
             for(int j = 0 ; j <  it->second[i].size();j++ ) {
                 cout << it->second[i][j]<<"  ";
             }
-
-            cout<<endl<<"__________________________________________"<<endl;
+            cout<<endl;
         }
+        cout<<"__________________________________________"<<endl;
         counter++;
     }
 }
